@@ -36,29 +36,42 @@ func handleKeys() {
 }
 
 func keyCodeToInput(code uint16) {
-	//fmt.Println(code)
-	if code == 65362 || code == 119 {
-		//up
+	// "W"
+	if code == 119 {
+		//forward
 		engine.StrafePlayerV(walkSpeed)
 	}
-	if code == 65364 || code == 115 {
-		//down
+	// "S"
+	if code == 115 {
+		//backward
 		engine.StrafePlayerV(-walkSpeed)
 	}
+	// "E"
 	if code == 101 {
 		//turn right
 		engine.TurnPlayer(rotateSpeed)
 	}
+	// "Q"
 	if code == 113 {
 		//turn left
 		engine.TurnPlayer(-rotateSpeed)
 	}
+	// "A"
 	if code == 97 {
 		//strafe left
 		engine.StrafePlayerH(-walkSpeed)
 	}
+	// "D"
 	if code == 100 {
 		//strafe right
 		engine.StrafePlayerH(walkSpeed)
+	}
+
+	// 'Shift' plus '+'/'-' - change FOV
+	if code == 43 {
+		engine.ShiftFov(5.0)
+	}
+	if code == 45 {
+		engine.ShiftFov(-5.0)
 	}
 }

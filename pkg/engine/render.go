@@ -36,17 +36,18 @@ var TilesSymbol = map[int]string{1: "*", 2: "#", 3: "Z", 4: "+"}
 // Renders a frame
 func RenderView(screen *console.Screen) {
 	start := time.Now()
-	lAngle := curAngle - float64(screen.Width()/2)
+	lAngle := curAngle - curFov/2
 
 	for i := 0; i <= screen.Width(); i++ {
-		ok, distance, tile := RayCast(curX, curY, lAngle+float64(i), viewDistance)
+		traversed := float64(i) / float64(screen.Width()) // How much of a screen space has been traversed (0.0 to 1.0, i.e. 0.3 is 30%)
+		hit, distance, tile := RayCast(curX, curY, lAngle+(curFov*traversed), viewDistance)
 
-		if ok {
+		if hit {
 			DrawWall(screen, tile, i, DistToHeight(distance, screen.Height()))
 		}
 	}
 
-	console.Render(screen, fmt.Sprintf("FPS: %f; view_angle:%f; player_pos:(x:%f,y:%f)", 1/time.Since(start).Seconds(), curAngle, curX, curY))
+	console.Render(screen, fmt.Sprintf("FPS: %6.4f; POV:%4.2f; FOV:%4.2f, player_pos:(x:%9.9f,y:%9.9f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
 }
 
 func DistToHeight(dist float64, screenHeight int) int {
