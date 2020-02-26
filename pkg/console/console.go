@@ -12,7 +12,7 @@ type Screen [][]string
 func (scr *Screen) Clear() {
 	for i, val := range *scr {
 		for j := range val {
-			(*scr)[i][j] = ".."
+			(*scr)[i][j] = "  "
 		}
 	}
 }
@@ -31,7 +31,7 @@ func (scr *Screen) SetPixel(x, y int, symbol string) error {
 		return errors.New("pixel is out of bounds")
 	}
 	if symbol == "" {
-		symbol = "+"
+		symbol = "X"
 	}
 	(*scr)[y][x] = symbol + " "
 	return nil

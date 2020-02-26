@@ -33,12 +33,13 @@ var WorldMap = [][]int{
 
 var TilesSymbol = map[int]string{1: "*", 2: "#", 3: "Z", 4: "+"}
 
+// Renders a frame
 func RenderView(screen *console.Screen) {
 	start := time.Now()
 	lAngle := curAngle - float64(screen.Width()/2)
 
 	for i := 0; i <= screen.Width(); i++ {
-		ok, distance, tile := Trace(curX, curY, lAngle+float64(i), viewDistance)
+		ok, distance, tile := RayCast(curX, curY, lAngle+float64(i), viewDistance)
 
 		if ok {
 			DrawWall(screen, tile, i, DistToHeight(distance, screen.Height()))
@@ -50,8 +51,8 @@ func RenderView(screen *console.Screen) {
 
 func DistToHeight(dist float64, screenHeight int) int {
 	height := int(float64(screenHeight) / dist)
-	if height <= 0 {
-		return 1
+	if height < 0 {
+		return 0
 	}
 	return height
 }
@@ -70,10 +71,11 @@ func DrawWall(screen *console.Screen, tile int, i int, height int) {
 	}
 }
 
-// Traces a ray with angle (0-360) and returns (hit status, hit distance (0 default), hit title value (0 default), distance is the max length of a ray
+// Casts a ray with angle (0-360) and returns (hit status, hit distance (0 default), hit title value (0 default), distance is the max length of a ray
 // 0 angle is UP, 90 is RIGHT and so on (360 is the same as 0)
 // (x0,y0,x1,y1) - vector (x0,y0 is a camera position)
-func Trace(x0, y0, angle float64, distance float64) (bool, float64, int) {
+// todo: implement DDA collision check algorithm instead of lazy stepping
+func RayCast(x0, y0, angle float64, distance float64) (bool, float64, int) {
 	length := 0.0
 	step := 0.01 // Interval of collision checking
 	angle += 270 // So that our 0 angle is UP on our Map
