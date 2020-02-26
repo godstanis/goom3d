@@ -1,11 +1,10 @@
 package main
 
 import (
-	"bytes"
-	"fmt"
-	"github.com/pkg/term"
+	"github.com/robotn/gohook"
 	"glfun/pkg/console"
 	"glfun/pkg/engine"
+	"time"
 )
 
 var sWidth, sHeight = 85, 50
@@ -17,57 +16,49 @@ func main() {
 
 	screen := console.Screen{}.NewScreen(sWidth, sHeight)
 
-	fmt.Println(engine.Trace(5,1,0, 10))
-
+	go handleKeys() // Run our input controls in a separate goroutine
 	for {
-		handleInput()
+		//continue
 		engine.RenderView(&screen)
+		time.Sleep(time.Millisecond * 10)
 	}
 }
 
-// Controls: WASD for walking, Q/E for turning. Arrow up/down - walking forward/backwards, arrow left/right - turning
-// Todo: figure out a non-blocking and better way for controls input :\
-func handleInput() {
-	c := getChar()
-	if c[0] == 3 {
-		panic("")
+func handleKeys() {
+	EvChan := hook.Start()
+	defer hook.End()
+
+	for ev := range EvChan {
+		if ev.Kind == hook.KeyDown {
+			keyCodeToInput(ev.Rawcode)
+		}
 	}
-	//fmt.Println(c)
-	if bytes.Equal(c, []byte{27, 91, 65}) || bytes.Equal(c, []byte{119}) {
+}
+
+func keyCodeToInput(code uint16) {
+	//fmt.Println(code)
+	if code == 65362 || code == 119 {
 		//up
 		engine.StrafePlayerV(walkSpeed)
 	}
-	if bytes.Equal(c, []byte{27, 91, 66}) || bytes.Equal(c, []byte{115}) {
+	if code == 65364 || code == 115 {
 		//down
 		engine.StrafePlayerV(-walkSpeed)
 	}
-	if bytes.Equal(c, []byte{27, 91, 67}) || bytes.Equal(c, []byte{101}) {
+	if code == 101 {
 		//turn right
 		engine.TurnPlayer(rotateSpeed)
 	}
-	if bytes.Equal(c, []byte{27, 91, 68}) || bytes.Equal(c, []byte{113}) {
+	if code == 113 {
 		//turn left
 		engine.TurnPlayer(-rotateSpeed)
 	}
-	if bytes.Equal(c, []byte{97}) {
+	if code == 97 {
 		//strafe left
 		engine.StrafePlayerH(-walkSpeed)
 	}
-	if bytes.Equal(c, []byte{100}) {
+	if code == 100 {
 		//strafe right
 		engine.StrafePlayerH(walkSpeed)
 	}
-}
-
-func getChar() []byte {
-	t, _ := term.Open("/dev/tty")
-	term.RawMode(t)
-	b := make([]byte, 3)
-	numRead, err := t.Read(b)
-	t.Restore()
-	t.Close()
-	if err != nil {
-		return nil
-	}
-	return b[0:numRead]
 }

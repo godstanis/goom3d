@@ -1,4 +1,3 @@
-// Game engine
 package engine
 
 import (
@@ -33,28 +32,6 @@ var WorldMap = [][]int{
 }
 
 var TilesSymbol = map[int]string{1: "*", 2: "#", 3: "Z", 4: "+"}
-
-var curX = 7.0
-var curY = 10.0
-var curAngle = 0.0
-var viewDistance = 15.0
-
-func TurnPlayer(dAngle float64) {
-	curAngle += dAngle
-}
-
-func StrafePlayerV(dDist float64) {
-	curX, curY = GetVectorEnd(curX, curY, curAngle-90, dDist)
-}
-
-func StrafePlayerH(dDist float64) {
-	curX, curY = GetVectorEnd(curX, curY, curAngle, dDist)
-}
-
-func MovePlayer(dX, dY float64) {
-	curX += dX
-	curY += dY
-}
 
 func RenderView(screen *console.Screen) {
 	start := time.Now()
@@ -120,7 +97,7 @@ func IntersectsWithMap(x, y float64) (bool, int) {
 	xStart := int(x)
 	yStart := int(y)
 
-	if xStart < len(Map) && yStart < len(Map[0]) {
+	if yStart < len(Map) && xStart < len(Map[0]) {
 		pointInBox := (x >= float64(xStart)) && (x <= float64(xStart)+1) && (y >= float64(yStart)) && (y <= float64(yStart)+1)
 		if pointInBox && Map[yStart][xStart] >= 1 {
 			return true, Map[yStart][xStart]
