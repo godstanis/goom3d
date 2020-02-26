@@ -2,7 +2,6 @@ package console
 
 import (
 	"errors"
-	"math"
 	"os"
 	"os/exec"
 	"strings"
@@ -34,7 +33,7 @@ func (scr *Screen) SetPixel(x, y int, symbol string) error {
 	if symbol == "" {
 		symbol = "+"
 	}
-	(*scr)[y][x] = symbol+" "
+	(*scr)[y][x] = symbol + " "
 	return nil
 }
 
@@ -46,10 +45,6 @@ func (scr Screen) NewScreen(w, h int) Screen {
 		}
 	}
 	return screen
-}
-
-func (scr *Screen) Line(x0, y0, x1, y1 int) {
-	bLine(scr, x0, y0, x1, y1)
 }
 
 func Render(screen *Screen, footer string) {
@@ -67,64 +62,4 @@ func screenToString(screen Screen) string {
 		res += strings.Join(str, "") + "\n"
 	}
 	return res
-}
-
-func bLine(screen *Screen, x0, y0, x1, y1 int) {
-	if math.Abs(float64(y1-y0)) < math.Abs(float64(x1-x0)) {
-		if x0 > x1 {
-			bLineLow(screen, x1, y1, x0, y0)
-		} else {
-			bLineLow(screen, x0, y0, x1, y1)
-		}
-	} else {
-		if y0 > y1 {
-			bLineHigh(screen, x1, y1, x0, y0)
-		} else {
-			bLineHigh(screen, x0, y0, x1, y1)
-		}
-	}
-}
-
-func bLineLow(screen *Screen, x0, y0, x1, y1 int) {
-	dx := x1 - x0
-	dy := y1 - y0
-	yi := 1
-	if dy < 0 {
-		yi = -1
-		dy = -dy
-	}
-
-	D := 2*dy - dx
-	y := y0
-
-	for x := x0; x <= x1; x++ {
-		screen.SetPixel(x, y, "")
-		if D > 0 {
-			y = y + yi
-			D = D - 2*dx
-		}
-		D = D + 2*dy
-	}
-}
-
-func bLineHigh(screen *Screen, x0, y0, x1, y1 int) {
-	dx := x1 - x0
-	dy := y1 - y0
-	xi := 1
-	if dx < 0 {
-		xi = -1
-		dx = -dx
-	}
-
-	D := 2*dx - dy
-	x := x0
-
-	for y := y0; y <= y1; y++ {
-		screen.SetPixel(x, y, "")
-		if D > 0 {
-			x = x + xi
-			D = D - 2*dy
-		}
-		D = D + 2*dx
-	}
 }
