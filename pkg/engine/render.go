@@ -47,7 +47,7 @@ func RenderView(screen *console.Screen) {
 		}
 	}
 
-	console.Render(screen, fmt.Sprintf("FPS: %6.4f; POV:%4.2f; FOV:%4.2f, player_pos:(x:%9.9f,y:%9.9f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
+	console.Render(screen, fmt.Sprintf("FPS: %6.4f; POV:%4.2f; FOV:%4.2f, player_pos:(x:%9.4f,y:%9.4f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
 }
 
 func DistToHeight(dist float64, screenHeight int) int {

@@ -13,6 +13,7 @@ var rotateSpeed, walkSpeed = 4.0, 0.3
 
 func main() {
 	engine.Map = engine.WorldMap
+	engine.SetPlayerPosition(4.6,7.0,0.0)
 
 	screen := console.Screen{}.NewScreen(sWidth, sHeight)
 
