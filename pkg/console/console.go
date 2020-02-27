@@ -12,7 +12,11 @@ type Screen [][]string
 func (scr *Screen) Clear() {
 	for i, val := range *scr {
 		for j := range val {
-			(*scr)[i][j] = "  "
+			if i <= len(*scr)/2 {
+				(*scr)[i][j] = "  "
+			} else {
+				(*scr)[i][j] = "⋅⋅"
+			}
 		}
 	}
 }

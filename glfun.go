@@ -7,13 +7,13 @@ import (
 	"time"
 )
 
-var sWidth, sHeight = 85, 50
+var sWidth, sHeight = 110, 70
 
-var rotateSpeed, walkSpeed = 4.0, 0.3
+var rotateSpeed, walkSpeed = 4.0, 0.07
 
 func main() {
 	engine.Map = engine.WorldMap
-	engine.SetPlayerPosition(4.6,7.0,0.0)
+	engine.SetPlayerPosition(4.6, 7.0, 0.0)
 
 	screen := console.Screen{}.NewScreen(sWidth, sHeight)
 
