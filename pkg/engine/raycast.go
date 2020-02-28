@@ -1,11 +1,13 @@
 package engine
 
-import "math"
+import (
+	"math"
+)
 
 // Casts a ray with angle (0-360) and returns (hit status, hit distance (0 default), hit title value (0 default), distance is the max length of a ray
 // 0 angle is UP, 90 is RIGHT and so on (360 is the same as 0)
 // (x0,y0,x1,y1) - vector (x0,y0 is a camera position)
-func RayCast(x0, y0, angle float64, distance float64) (hit bool, tile float64, dist int, tileP float64) {
+func RayCast(x0, y0, angle float64, distance float64) (hit bool, dist float64, tile int, tileP float64) {
 	length := 0.0
 	step := 0.01 // Interval of collision checking
 	angle += 270 // So that our 0 angle is UP on our Map
@@ -45,13 +47,14 @@ func IntersectsWithMap(x, y float64) (intersects bool, tile int, tilePoint float
 // For example we have point x:3.2;y:3.9. It's obvious that
 func TilePoint(x, y float64) (tilePoint float64) {
 	flatX, flatY := FlattenIntersect(x, y)
-	pointX := flatX - float64(int(x))
-	pointY := flatY - float64(int(y))
+
+	pointX := flatX - math.Round(x)
+	pointY := flatY - math.Round(y)
 
 	if pointX == 0.0 {
-		return pointY
+		return math.Abs(pointY)
 	} else {
-		return pointX
+		return math.Abs(pointX)
 	}
 }
 
