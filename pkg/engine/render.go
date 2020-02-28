@@ -20,13 +20,16 @@ var WorldMap = [][]int{
 	{1, 3, 4, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 1},
+	{1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 1},
-	{1, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 1},
-	{1, 0, 2, 0, 2, 0, 0, 0, 0, 2, 2, 0, 0, 1},
+	{1, 0, 0, 0, 0, 0, 0, 0, 3, 2, 2, 2, 0, 1},
+	{1, 0, 4, 0, 4, 0, 0, 0, 0, 2, 2, 0, 0, 1},
 	{1, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 }
@@ -34,6 +37,13 @@ var WorldMap = [][]int{
 // Renders a frame
 func RenderView(screen *console.Screen) {
 	start := time.Now()
+	DrawWorld(screen)
+	DrawUI(screen)
+	console.Render(screen, fmt.Sprintf("FPS: %6.4f; POV:%4.2f; FOV:%4.2f, player_pos:(x:%9.4f,y:%9.4f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
+}
+
+// Draws actual rendered world objects
+func DrawWorld(screen *console.Screen) {
 	lAngle := curAngle - curFov/2
 
 	// Traverse each row of our screen, cast a ray and render it to screen buffer
@@ -42,15 +52,13 @@ func RenderView(screen *console.Screen) {
 		hit, distance, tile, tileP := RayCast(curX, curY, lAngle+(curFov*traversed), viewDistance)
 
 		if hit {
-			DrawTexturedWall(screen, tile, i, DistToHeight(distance, screen.Height()), tileP)
+			DrawTexturedWallCol(screen, tile, i, DistToHeight(distance, screen.Height()), tileP)
 		}
 	}
-
-	console.Render(screen, fmt.Sprintf("FPS: %6.4f; POV:%4.2f; FOV:%4.2f, player_pos:(x:%9.4f,y:%9.4f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
 }
 
 // Draws textured wall column on screen
-func DrawTexturedWall(screen *console.Screen, tile int, i int, height int, tileP float64) {
+func DrawTexturedWallCol(screen *console.Screen, tile int, i int, height int, tileP float64) {
 	var offset, textureOffset int
 	if height > screen.Height() {
 		textureOffset = (height - screen.Height()) / 2

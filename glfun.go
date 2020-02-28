@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var sWidth, sHeight = 110, 70
+var sWidth, sHeight = 100, 50
 var rotateSpeed, walkSpeed = 4.0, 0.07
 
 func main() {
