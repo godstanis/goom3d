@@ -51,15 +51,18 @@ func RenderView(screen *console.Screen) {
 
 // Draws textured wall column on screen
 func DrawTexturedWall(screen *console.Screen, tile int, i int, height int, tileP float64) {
-	var offset int
+	var offset, textureOffset int
 	if height > screen.Height() {
-		offset = 0
+		textureOffset = (height - screen.Height()) / 2
 	} else {
 		offset = (screen.Height() - height) / 2
 	}
+
 	scaledTextureRow := ScaleTextureCol(tile, height, tileP)
+
 	for j := offset; j < screen.Height()-offset-1; j++ {
-		_ = screen.SetPixel(i, j, scaledTextureRow[j-offset])
+		_ = screen.SetPixel(i, j, scaledTextureRow[textureOffset])
+		textureOffset++
 	}
 }
 

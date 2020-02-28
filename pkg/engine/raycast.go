@@ -36,7 +36,7 @@ func IntersectsWithMap(x, y float64) (intersects bool, tile int, tilePoint float
 	gridX := int(x)
 	gridY := int(y)
 
-	if gridY < len(Map) && gridX < len(Map[0]) && Map[gridY][gridX] >= 1 {
+	if gridX >= 0 && gridY >= 0 && gridY < len(Map) && gridX < len(Map[0]) && Map[gridY][gridX] >= 1 {
 		pointInBox := (x >= float64(gridX)) && (x <= float64(gridX)+1) && (y >= float64(gridY)) && (y <= float64(gridY)+1)
 		if pointInBox {
 			return true, Map[gridY][gridX], TilePoint(x, y)
