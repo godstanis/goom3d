@@ -8,7 +8,6 @@ import (
 )
 
 var sWidth, sHeight = 110, 70
-
 var rotateSpeed, walkSpeed = 4.0, 0.07
 
 func main() {
@@ -25,6 +24,7 @@ func main() {
 	}
 }
 
+// Handles keyboard input
 func handleKeys() {
 	EvChan := hook.Start()
 	defer hook.End()
@@ -36,6 +36,7 @@ func handleKeys() {
 	}
 }
 
+// Translates key code to actual action
 func keyCodeToInput(code uint16) {
 	// "W"
 	if code == 119 {

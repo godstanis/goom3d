@@ -7,8 +7,21 @@ import (
 	"strings"
 )
 
+// Screen represents current screen buffer
 type Screen [][]string
 
+// NewScreen: empty screen initializer with buffer of empty pixels
+func (scr Screen) NewScreen(w, h int) Screen {
+	screen := Screen(make([][]string, h))
+	for i := 0; i < h; i++ {
+		for j := 0; j < w; j++ {
+			screen[i] = append(screen[i], "  ")
+		}
+	}
+	return screen
+}
+
+// Clear: clears the screen
 func (scr *Screen) Clear() {
 	for i, val := range *scr {
 		for j := range val {
@@ -21,14 +34,17 @@ func (scr *Screen) Clear() {
 	}
 }
 
+// Height: get current screen height
 func (scr Screen) Height() int {
 	return len(scr)
 }
 
+// Width: get current screen width
 func (scr Screen) Width() int {
 	return len(scr[0])
 }
 
+// SetPixel: puts a pixel on screen
 func (scr *Screen) SetPixel(x, y int, symbol string) error {
 	if scr.Width() <= x || scr.Height() <= y {
 		//fmt.Printf("Pixel is out of bounds! x:%d, y:%d, height:%d, width: %d\n", x,y,scr.Height(), scr.Width())
@@ -41,16 +57,7 @@ func (scr *Screen) SetPixel(x, y int, symbol string) error {
 	return nil
 }
 
-func (scr Screen) NewScreen(w, h int) Screen {
-	screen := Screen(make([][]string, h))
-	for i := 0; i < h; i++ {
-		for j := 0; j < w; j++ {
-			screen[i] = append(screen[i], "__")
-		}
-	}
-	return screen
-}
-
+// Render: actually transfer screen buffer to console stdout
 func Render(screen *Screen, footer string) {
 	cmd := exec.Command("clear")
 	cmd.Stdout = os.Stdout
@@ -60,6 +67,7 @@ func Render(screen *Screen, footer string) {
 	screen.Clear()
 }
 
+// Helper for translating screen to one long string
 func screenToString(screen Screen) string {
 	var res string
 	for _, str := range screen {
