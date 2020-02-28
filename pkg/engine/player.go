@@ -30,12 +30,22 @@ func TurnPlayer(dAngle float64) {
 
 // Moves player vertically (forward, backward) by a given dist (related to it's angle)
 func StrafePlayerV(dDist float64) {
-	curX, curY = GetVectorEnd(curX, curY, curAngle, dDist)
+	nextX, nextY := GetVectorEnd(curX, curY, curAngle, dDist)
+	intersects, _, _ := IntersectsWithMap(nextX, nextY)
+	if intersects {
+		return
+	}
+	curX, curY = nextX, nextY
 }
 
 // Moves player horizontally (left, right) by a given dist (related to it's angle)
 func StrafePlayerH(dDist float64) {
-	curX, curY = GetVectorEnd(curX, curY, curAngle+90, dDist)
+	nextX, nextY := GetVectorEnd(curX, curY, curAngle+90, dDist)
+	intersects, _, _ := IntersectsWithMap(nextX, nextY)
+	if intersects {
+		return
+	}
+	curX, curY = nextX, nextY
 }
 
 // Changes FOV by a given amount
