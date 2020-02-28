@@ -52,10 +52,10 @@ func IntersectsWithMap(x, y float64) (intersects bool, tile int, tilePoint float
 func TilePoint(x, y float64) (tilePoint float64) {
 	gridX, gridY := IntersectToGrid(x, y)
 
-	pointX := gridX - math.Round(x)
-	pointY := gridY - math.Round(y)
+	pointX := gridX - float64(int(x))
+	pointY := gridY - float64(int(y))
 
-	if pointX == 0.0 {
+	if gridX != x {
 		return math.Abs(pointY)
 	}
 	return math.Abs(pointX)
