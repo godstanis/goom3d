@@ -44,55 +44,27 @@ func IntersectsWithMap(x, y float64) (intersects bool, tile int, tilePoint float
 
 // Determines current tile hit point relative to it's plane (for example 0.3 means we've hit 0/3 point of a wall)
 //
-// For example we have point x:3.2;y:3.9. It's obvious that
+// For example we have point x:3.2;y:3.9. It's obvious that if we stick it to our grid it is 3.2, 4.
 func TilePoint(x, y float64) (tilePoint float64) {
-	flatX, flatY := FlattenIntersect(x, y)
+	gridX, gridY := IntersectToGrid(x, y)
 
-	pointX := flatX - math.Round(x)
-	pointY := flatY - math.Round(y)
+	pointX := gridX - math.Round(x)
+	pointY := gridY - math.Round(y)
 
 	if pointX == 0.0 {
 		return math.Abs(pointY)
-	} else {
-		return math.Abs(pointX)
 	}
+	return math.Abs(pointX)
 }
 
 // Because we use lazy raycasting with steps, we should perform additional rounding to get exact intersection with our grid (i.e. walls)
-// todo: reduce complexity and improve readability
-func FlattenIntersect(x, y float64) (xi, yi float64) {
-	tileXf, tileYf := float64(int(x)), float64(int(y))
+func IntersectToGrid(x, y float64) (xi, yi float64) {
+	// Calculating distance of our current coordinates to the closest grid coordinates
+	distToX := math.Abs(math.Round(x) - x)
+	distToY := math.Abs(math.Round(y) - y)
 
-	distToStartX, distToEndX := x-tileXf, tileXf+1-x
-	distToStartY, distToEndY := y-tileYf, tileYf+1-y
-
-	closeToStartX := distToStartX < distToEndX
-	closeToStartY := distToStartY < distToEndY
-
-	var distToX, distToY float64
-
-	if closeToStartX {
-		distToX = distToStartX
-	} else {
-		distToX = distToEndX
+	if distToX < distToY {
+		return math.Round(x), y
 	}
-	if closeToStartY {
-		distToY = distToStartY
-	} else {
-		distToY = distToEndY
-	}
-
-	baseIsX := distToX < distToY
-
-	var resX, resY float64
-
-	if baseIsX {
-		resX = math.Round(x)
-		resY = y
-	} else {
-		resX = x
-		resY = math.Round(y)
-	}
-
-	return resX, resY
+	return x, math.Round(y)
 }
