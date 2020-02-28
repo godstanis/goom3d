@@ -1,3 +1,4 @@
+// Texture mapping related stuff
 package engine
 
 import "math"
@@ -57,7 +58,11 @@ var TileTextures = map[int][][]string{
 }
 
 // Scales texture column to integer h proportionally
-// Returns scaled column
+// Returns scaled column of texture tiles
+//
+// It's a simple and rough but effective texture scaling method, we just calculate relation of our original size to required
+// 	For example if our texture is only 5 symbols high but we want to render it on screen with 10 height we just get the relation
+// 	in this case is 5/10=0.5 of our screen row per texture row (i.e. 1 texture row for each screen row)
 func ScaleTextureCol(tile, h int, tileP float64) (scaled []string) {
 	c := TranslateToTextureCol(tile, tileP)
 	var textureCol, scaledTexture []string
@@ -70,6 +75,7 @@ func ScaleTextureCol(tile, h int, tileP float64) (scaled []string) {
 		return textureCol
 	}
 
+	// Actual scaling
 	perTile := float64(len(textureCol)-1) / float64(h-1)
 	curTileS := 0.0
 	for i := 0; i < h; i++ {

@@ -7,7 +7,7 @@ import "math"
 var curX = 0.0
 var curY = 0.0
 
-// Current POV of a player
+// Current POV of a player. 0 is RIGHT if we look at our map. UP is 270 and so on
 var curAngle = 0.0
 
 // Current FOV of a camera
@@ -19,7 +19,7 @@ var viewDistance = 20.0
 // Turns player around by a given angle (minus is left, plus is right)
 func TurnPlayer(dAngle float64) {
 	curAngle += dAngle
-	
+
 	if curAngle > 360 {
 		curAngle = 0 + math.Abs(dAngle)
 	}
@@ -30,12 +30,12 @@ func TurnPlayer(dAngle float64) {
 
 // Moves player vertically (forward, backward) by a given dist (related to it's angle)
 func StrafePlayerV(dDist float64) {
-	curX, curY = GetVectorEnd(curX, curY, curAngle-90, dDist)
+	curX, curY = GetVectorEnd(curX, curY, curAngle, dDist)
 }
 
 // Moves player horizontally (left, right) by a given dist (related to it's angle)
 func StrafePlayerH(dDist float64) {
-	curX, curY = GetVectorEnd(curX, curY, curAngle, dDist)
+	curX, curY = GetVectorEnd(curX, curY, curAngle+90, dDist)
 }
 
 // Changes FOV by a given amount

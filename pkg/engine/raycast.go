@@ -1,3 +1,4 @@
+// Ray casting related stuff
 package engine
 
 import (
@@ -5,14 +6,17 @@ import (
 )
 
 // Casts a ray with angle (0-360) and returns (hit status, hit distance (0 default), hit title value (0 default), distance is the max length of a ray
+//
 // 0 angle is UP, 90 is RIGHT and so on (360 is the same as 0)
-// (x0,y0,x1,y1) - vector (x0,y0 is a camera position)
+// (x0,y0,x1,y1) - vector (x0,y0 is a ray starting point)
+//
+// tileP is a relation of our wall hit to it's starting plane point (for example if a wall is on X axis and we hit it in the middle, tileP is 0.5)
+// 	so 0.0 means we hit the beginning of a wall, 1.0 means we hit the last column of a wall
 func RayCast(x0, y0, angle float64, distance float64) (hit bool, dist float64, tile int, tileP float64) {
-	length := 0.0
-	step := 0.01 // Interval of collision checking
-	angle += 270 // So that our 0 angle is UP on our Map
-	for length < distance {
-		if ok, tile, tileP := IntersectsWithMap(GetVectorEnd(x0, y0, angle, length)); ok {
+	length := 0.0 // Length of hit check
+	step := 0.01  // Interval of collision checking
+	for length <= distance {
+		if hit, tile, tileP := IntersectsWithMap(GetVectorEnd(x0, y0, angle, length)); hit {
 			return true, length, tile, tileP
 		}
 		length += step
@@ -29,13 +33,13 @@ func GetVectorEnd(x, y float64, angle float64, length float64) (float64, float64
 
 // Returns intersect status and tile value
 func IntersectsWithMap(x, y float64) (intersects bool, tile int, tilePoint float64) {
-	xStart := int(x)
-	yStart := int(y)
+	gridX := int(x)
+	gridY := int(y)
 
-	if yStart < len(Map) && xStart < len(Map[0]) {
-		pointInBox := (x >= float64(xStart)) && (x <= float64(xStart)+1) && (y >= float64(yStart)) && (y <= float64(yStart)+1)
-		if pointInBox && Map[yStart][xStart] >= 1 {
-			return true, Map[yStart][xStart], TilePoint(x, y)
+	if gridY < len(Map) && gridX < len(Map[0]) && Map[gridY][gridX] >= 1 {
+		pointInBox := (x >= float64(gridX)) && (x <= float64(gridX)+1) && (y >= float64(gridY)) && (y <= float64(gridY)+1)
+		if pointInBox {
+			return true, Map[gridY][gridX], TilePoint(x, y)
 		}
 	}
 

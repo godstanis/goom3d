@@ -1,3 +1,4 @@
+// Rendering data and methods
 package engine
 
 import (
