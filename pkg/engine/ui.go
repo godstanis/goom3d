@@ -2,17 +2,17 @@ package engine
 
 import (
 	"fmt"
-	"glfun/pkg/console"
+	"glfun/pkg/screen"
 )
 
 // Draws the UI
-func DrawUI(screen *console.Screen) {
+func DrawUI(screen screen.Screen) {
 	DrawMinimap(screen)
 	DrawCrossHair(screen)
 }
 
 // Draws simple crosshair
-func DrawCrossHair(screen *console.Screen) {
+func DrawCrossHair(screen screen.Screen) {
 	crosshairTexture := [][]string{
 		{"", "", "", "", ""},
 		{"", "", "", "", ""},
@@ -33,7 +33,7 @@ func DrawCrossHair(screen *console.Screen) {
 }
 
 // Draws minimap with player position
-func DrawMinimap(screen *console.Screen) {
+func DrawMinimap(screen screen.Screen) {
 	offset := 2
 	for rI, row := range Map {
 		for tI, tile := range row {

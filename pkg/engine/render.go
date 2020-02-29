@@ -3,7 +3,7 @@ package engine
 
 import (
 	"fmt"
-	"glfun/pkg/console"
+	"glfun/pkg/screen"
 	"time"
 )
 
@@ -35,15 +35,22 @@ var WorldMap = [][]int{
 }
 
 // Renders a frame
-func RenderView(screen *console.Screen) {
+func RenderView(screen screen.Screen) {
 	start := time.Now()
 	DrawWorld(screen)
 	DrawUI(screen)
-	console.Render(screen, fmt.Sprintf("FPS: %6.4f; POV:%4.2f; FOV:%4.2f, player_pos:(x:%9.4f,y:%9.4f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
+	RenderToConsole(screen, fmt.Sprintf("FPS: %6.4f; POV:%4.2f; FOV:%4.2f, player_pos:(x:%9.4f,y:%9.4f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
+}
+
+// RenderToConsole: actually transfer screen buffer to console stdout
+func RenderToConsole(screen screen.Screen, footer string) {
+	fmt.Printf("\033[%d;%dH", 0, 0)
+	fmt.Println(screen.String() + "\n" + footer)
+	screen.Clear()
 }
 
 // Draws actual rendered world objects
-func DrawWorld(screen *console.Screen) {
+func DrawWorld(screen screen.Screen) {
 	lAngle := curAngle - curFov/2
 
 	// Traverse each row of our screen, cast a ray and render it to screen buffer
@@ -58,7 +65,7 @@ func DrawWorld(screen *console.Screen) {
 }
 
 // Draws textured wall column on screen
-func DrawTexturedWallCol(screen *console.Screen, tile int, i int, height int, tileP float64) {
+func DrawTexturedWallCol(screen screen.Screen, tile int, i int, height int, tileP float64) {
 	var offset, textureOffset int
 	if height > screen.Height() {
 		textureOffset = (height - screen.Height()) / 2

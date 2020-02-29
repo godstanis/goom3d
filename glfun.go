@@ -2,25 +2,22 @@ package main
 
 import (
 	"github.com/robotn/gohook"
-	"glfun/pkg/console"
 	"glfun/pkg/engine"
-	"time"
+	"glfun/pkg/screen"
 )
 
-var sWidth, sHeight = 100, 50
+var sWidth, sHeight = 150, 50
 var rotateSpeed, walkSpeed = 4.0, 0.07
 
 func main() {
 	engine.Map = engine.WorldMap
 	engine.SetPlayerPosition(4.6, 7.0, 0.0)
 
-	screen := console.Screen{}.NewScreen(sWidth, sHeight)
+	symScreen := screen.Symbol{}.NewScreen(sWidth, sHeight)
 
 	go handleKeys() // Run our input controls in a separate goroutine
 	for {
-		//continue
-		engine.RenderView(&screen)
-		time.Sleep(time.Millisecond * 10)
+		engine.RenderView(&symScreen)
 	}
 }
 
