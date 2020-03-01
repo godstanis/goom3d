@@ -1,5 +1,5 @@
 # goom3d
-Pseudo-3d (inspired by wolfenstein 3d) first person shooter written on go
+Pseudo-3d (inspired by wolfenstein 3d) first person shooter written in go
 
 ### TODO:
   - Repository:
