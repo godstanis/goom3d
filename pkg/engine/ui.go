@@ -6,13 +6,13 @@ import (
 )
 
 // Draws the UI
-func DrawUI(screen screen.Screen) {
-	DrawMinimap(screen)
-	DrawCrossHair(screen)
+func drawUI(screen screen.Screen) {
+	drawMinimap(screen)
+	drawCrosshair(screen)
 }
 
 // Draws simple crosshair
-func DrawCrossHair(screen screen.Screen) {
+func drawCrosshair(screen screen.Screen) {
 	crosshairTexture := [][]string{
 		{"", "", "", "", ""},
 		{"", "", "", "", ""},
@@ -33,7 +33,7 @@ func DrawCrossHair(screen screen.Screen) {
 }
 
 // Draws minimap with player position
-func DrawMinimap(screen screen.Screen) {
+func drawMinimap(screen screen.Screen) {
 	offset := 2
 	for rI, row := range Map {
 		for tI, tile := range row {

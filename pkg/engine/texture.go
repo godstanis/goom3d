@@ -47,10 +47,10 @@ var TileTextures = map[int][][]string{
 	4: {
 		{"▒", "▒", "▒", "▒", "▒", "▒", "▒"},
 		{"▒", "░", "░", "░", "░", "░", "▒"},
-		{"▒", "░", "□", "□", "□", "░", "▓"},
-		{"▒", "░", "□", "□", "□", "░", "▒"},
+		{"▒", "░", " ", " ", " ", "░", "▓"},
+		{"▒", "░", " ", " ", " ", "░", "▒"},
 		{"▒", "░", "░", "░", "░", "░", "▒"},
-		{"▒", "░", "⨀", "░", "░", "░", "▒"},
+		{"▒", "░", "╬", "░", "░", "░", "▒"},
 		{"▒", "░", "░", "░", "░", "░", "▓"},
 		{"▒", "░", "░", "░", "░", "░", "▒"},
 		{"▒", "▒", "▒", "▒", "▒", "▒", "▒"},
@@ -63,8 +63,8 @@ var TileTextures = map[int][][]string{
 // It's a simple and rough but effective texture scaling method, we just calculate relation of our original size to required
 // 	For example if our texture is only 5 symbols high but we want to render it on screen with 10 height we just get the relation
 // 	in this case is 5/10=0.5 of our screen row per texture row (i.e. 1 texture row for each screen row)
-func ScaleTextureCol(tile, h int, tileP float64) (scaled []string) {
-	c := TranslateToTextureCol(tile, tileP)
+func scaleTileTextureCol(tile, h int, tileP float64) (scaled []string) {
+	c := translateToTextureCol(tile, tileP)
 	var textureCol, scaledTexture []string
 	for _, val := range TileTextures[tile] {
 		textureCol = append(textureCol, val[c])
@@ -93,7 +93,7 @@ func ScaleTextureCol(tile, h int, tileP float64) (scaled []string) {
 }
 
 // Translates percentages to concrete texture column
-func TranslateToTextureCol(tile int, tileP float64) int {
+func translateToTextureCol(tile int, tileP float64) int {
 	textureWidth := len(TileTextures[tile][0])
 	return int(math.Round(float64(textureWidth-1) * tileP))
 }

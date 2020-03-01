@@ -13,6 +13,8 @@ import (
 // 1 - solid wall
 var Map = make([][]int, 1)
 
+var renderDebugInfo string
+
 var WorldMap = [][]int{
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	{1, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -37,35 +39,37 @@ var WorldMap = [][]int{
 // Renders a frame
 func RenderView(screen screen.Screen) {
 	start := time.Now()
-	DrawWorld(screen)
-	DrawUI(screen)
-	RenderToConsole(screen, fmt.Sprintf("FPS: %6.4f; POV:%4.2f; FOV:%4.2f, player_pos:(x:%9.4f,y:%9.4f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
+	drawWorld(screen)
+	drawUI(screen)
+	renderToConsole(screen, fmt.Sprintf("FPS: %6.4f; POV:%4.2f; FOV:%4.2f, player_pos:(X:%9.4f,Y:%9.4f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
 }
 
-// RenderToConsole: actually transfer screen buffer to console stdout
-func RenderToConsole(screen screen.Screen, footer string) {
+// renderToConsole: actually transfer screen buffer to console stdout
+func renderToConsole(screen screen.Screen, footer string) {
 	fmt.Printf("\033[%d;%dH", 0, 0)
-	fmt.Println(screen.String() + "\n" + footer)
+	fmt.Println(screen.String() + "\n" + footer + "\n" + renderDebugInfo)
 	screen.Clear()
 }
 
 // Draws actual rendered world objects
-func DrawWorld(screen screen.Screen) {
-	lAngle := curAngle - curFov/2
+func drawWorld(screen screen.Screen) {
+	lAngle := Degree{}.NewDegree(curAngle.Get() - curFov/2)
 
 	// Traverse each row of our screen, cast a ray and render it to screen buffer
 	for i := 0; i <= screen.Width(); i++ {
 		traversed := float64(i) / float64(screen.Width()) // How much of a screen space has been traversed (0.0 to 1.0, i.e. 0.3 is 30%)
-		hit, distance, tile, tileP := RayCast(curX, curY, lAngle+(curFov*traversed), viewDistance)
+		angle := Degree{}.NewDegree(lAngle.Get()+(curFov*traversed))
+		hit, distance, tile, tileP := rayCast(curX, curY, angle, viewDistance)
 
 		if hit {
-			DrawTexturedWallCol(screen, tile, i, DistToHeight(distance, screen.Height()), tileP)
+			drawTexturedWallColumn(screen, tile, i, distToHeight(distance, screen.Height()), tileP) // Project walls on screen
 		}
+		drawSpritesColumn(screen, i, angle, distance) // Project sprites on screen
 	}
 }
 
 // Draws textured wall column on screen
-func DrawTexturedWallCol(screen screen.Screen, tile int, i int, height int, tileP float64) {
+func drawTexturedWallColumn(screen screen.Screen, tile int, i int, height int, tileP float64) {
 	var offset, textureOffset int
 	if height > screen.Height() {
 		textureOffset = (height - screen.Height()) / 2
@@ -73,7 +77,7 @@ func DrawTexturedWallCol(screen screen.Screen, tile int, i int, height int, tile
 		offset = (screen.Height() - height) / 2
 	}
 
-	scaledTextureRow := ScaleTextureCol(tile, height, tileP)
+	scaledTextureRow := scaleTileTextureCol(tile, height, tileP)
 
 	for j := offset; j < screen.Height()-offset-1; j++ {
 		_ = screen.SetPixel(i, j, scaledTextureRow[textureOffset])
@@ -82,7 +86,7 @@ func DrawTexturedWallCol(screen screen.Screen, tile int, i int, height int, tile
 }
 
 // Determines final height of a wall column on screen
-func DistToHeight(dist float64, screenHeight int) int {
+func distToHeight(dist float64, screenHeight int) int {
 	height := int(float64(screenHeight) / dist)
 	if height < 0 {
 		return 0

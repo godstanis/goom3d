@@ -12,11 +12,11 @@ import (
 //
 // tileP is a relation of our wall hit to it's starting plane point (for example if a wall is on X axis and we hit it in the middle, tileP is 0.5)
 // 	so 0.0 means we hit the beginning of a wall, 1.0 means we hit the last column of a wall
-func RayCast(x0, y0, angle float64, distance float64) (hit bool, dist float64, tile int, tileP float64) {
+func rayCast(x0, y0 float64, angle Degree, distance float64) (hit bool, dist float64, tile int, tileP float64) {
 	length := 0.0 // Length of hit check
 	step := 0.01  // Interval of collision checking
 	for length <= distance {
-		if hit, tile, tileP := IntersectsWithMap(GetVectorEnd(x0, y0, angle, length)); hit {
+		if hit, tile, tileP := IntersectsWithMap(getVectorEnd(x0, y0, angle, length)); hit {
 			return true, length, tile, tileP
 		}
 		length += step
@@ -26,8 +26,8 @@ func RayCast(x0, y0, angle float64, distance float64) (hit bool, dist float64, t
 
 // Returns vector's and coordinate (vector is a starting position, angle and distance)
 // angle - degrees
-func GetVectorEnd(x, y float64, angle float64, length float64) (float64, float64) {
-	rads := angle * (math.Pi / 180)
+func getVectorEnd(x, y float64, angle Degree, length float64) (float64, float64) {
+	rads := angle.Get() * (math.Pi / 180)
 	return length*math.Cos(rads) + x, length*math.Sin(rads) + y
 }
 
@@ -39,7 +39,7 @@ func IntersectsWithMap(x, y float64) (intersects bool, tile int, tilePoint float
 	if gridX >= 0 && gridY >= 0 && gridY < len(Map) && gridX < len(Map[0]) && Map[gridY][gridX] >= 1 {
 		pointInBox := (x >= float64(gridX)) && (x <= float64(gridX)+1) && (y >= float64(gridY)) && (y <= float64(gridY)+1)
 		if pointInBox {
-			return true, Map[gridY][gridX], TilePoint(x, y)
+			return true, Map[gridY][gridX], getTilePoint(x, y)
 		}
 	}
 
@@ -48,9 +48,9 @@ func IntersectsWithMap(x, y float64) (intersects bool, tile int, tilePoint float
 
 // Determines current tile hit point relative to it's plane (for example 0.3 means we've hit 0/3 point of a wall)
 //
-// For example we have point x:3.2;y:3.9. It's obvious that if we stick it to our grid it is 3.2, 4.
-func TilePoint(x, y float64) (tilePoint float64) {
-	gridX, gridY := IntersectToGrid(x, y)
+// For example we have point X:3.2;Y:3.9. It's obvious that if we stick it to our grid it is 3.2, 4.
+func getTilePoint(x, y float64) (tilePoint float64) {
+	gridX, gridY := intersectToGrid(x, y)
 
 	pointX := gridX - float64(int(x))
 	pointY := gridY - float64(int(y))
@@ -62,7 +62,7 @@ func TilePoint(x, y float64) (tilePoint float64) {
 }
 
 // Because we use lazy raycasting with steps, we should perform additional rounding to get exact intersection with our grid (i.e. walls)
-func IntersectToGrid(x, y float64) (xi, yi float64) {
+func intersectToGrid(x, y float64) (xi, yi float64) {
 	// Calculating distance of our current coordinates to the closest grid coordinates
 	distToX := math.Abs(math.Round(x) - x)
 	distToY := math.Abs(math.Round(y) - y)
