@@ -1,5 +1,6 @@
 package screen
 
+// Screen represents screen buffer
 type Screen interface {
 	NewScreen(w, h int) Symbol
 	Height() int

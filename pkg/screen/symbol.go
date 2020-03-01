@@ -55,10 +55,12 @@ func (scr *Symbol) SetPixel(x, y int, symbol string) error {
 	return nil
 }
 
+// GetPixel: returns pixel value
 func (scr Symbol) GetPixel(x, y int) string {
 	return scr[y][x]
 }
 
+// String: converts screen data to one string
 func (scr Symbol) String() string {
 	var res string
 	for _, str := range scr {

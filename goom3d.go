@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/godstanis/goom3d/pkg/engine"
+	"github.com/godstanis/goom3d/pkg/screen"
 	"github.com/robotn/gohook"
-	"glfun/pkg/engine"
-	"glfun/pkg/screen"
 )
 
 var sWidth, sHeight = 150, 50

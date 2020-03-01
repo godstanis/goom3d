@@ -1,4 +1,4 @@
-module glfun
+module github.com/godstanis/goom3d
 
 go 1.13
 

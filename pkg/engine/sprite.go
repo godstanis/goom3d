@@ -1,7 +1,7 @@
 package engine
 
 import (
-	"glfun/pkg/screen"
+	"github.com/godstanis/goom3d/pkg/screen"
 	"math"
 	"sort"
 )

@@ -3,7 +3,7 @@ package engine
 
 import (
 	"fmt"
-	"glfun/pkg/screen"
+	"github.com/godstanis/goom3d/pkg/screen"
 	"time"
 )
 
