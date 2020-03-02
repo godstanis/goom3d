@@ -22,10 +22,7 @@ jobs:
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
-        fi
-# xcb libxcb-xkb-dev x11-xkb-utils 
-    - name: Install libx11
-      run: sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev
+        fi; sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev
 
     - name: Build
       run: go build -v .
