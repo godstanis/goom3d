@@ -24,13 +24,11 @@ jobs:
             dep ensure
         fi
         
-#     - name: Install libx11
-#       run: sudo apt install libx11-dev
+    - name: Install libx11
+      run: sudo apt-get install xcb libxcb-xkb-dev x11-xkb-utils libx11-xcb-dev libxkbcommon-x11-dev
 
     - name: Build
-      run: |
-        sudo apt install libx11-dev
-        go build -v .
+      run: go build -v .
     
     - name: Prepare build artifacts
       run: mkdir ./artifacts; mv ./goom3d ./artifacts
