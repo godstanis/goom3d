@@ -13,7 +13,7 @@ func (scr Symbol) NewScreen(w, h int) Symbol {
 	screen := Symbol(make([][]string, h))
 	for i := 0; i < h; i++ {
 		for j := 0; j < w; j++ {
-			screen[i] = append(screen[i], " ")
+			screen[i] = append(screen[i], "  ")
 		}
 	}
 	return screen
@@ -24,9 +24,9 @@ func (scr *Symbol) Clear() {
 	for i, val := range *scr {
 		for j := range val {
 			if i <= len(*scr)/2 {
-				(*scr)[i][j] = " "
+				_ = scr.SetPixel(j,i, " ")
 			} else {
-				(*scr)[i][j] = "_" // Floor
+				_ = scr.SetPixel(j,i, "_") // Floor
 			}
 		}
 	}
@@ -49,9 +49,9 @@ func (scr *Symbol) SetPixel(x, y int, symbol string) error {
 		return errors.New("pixel is out of bounds")
 	}
 	if symbol == "" {
-		symbol = "X"
+		symbol = "XX"
 	}
-	(*scr)[y][x] = symbol + ""
+	(*scr)[y][x] = symbol + symbol
 	return nil
 }
 

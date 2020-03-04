@@ -38,13 +38,13 @@ func drawMinimap(screen screen.Screen) {
 	for rI, row := range Map {
 		for tI, tile := range row {
 			if int(curY) == rI && int(curX) == tI {
-				_ = screen.SetPixel(tI+offset, rI+offset, fmt.Sprintf("%s", "P"))
+				_ = screen.SetPixel(tI+offset, rI+offset, fmt.Sprintf("%s", "▓"))
 				continue
 			}
 			if tile == 0 {
 				_ = screen.SetPixel(tI+offset, rI+offset, " ")
 			} else {
-				_ = screen.SetPixel(tI+offset, rI+offset, fmt.Sprintf("%d", tile))
+				_ = screen.SetPixel(tI+offset, rI+offset, "░")
 			}
 
 		}

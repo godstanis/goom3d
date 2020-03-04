@@ -6,7 +6,7 @@ import (
 	"github.com/robotn/gohook"
 )
 
-var sWidth, sHeight = 150, 50
+var sWidth, sHeight = 80, 50
 var rotateSpeed, walkSpeed = 4.0, 0.07
 
 func main() {
