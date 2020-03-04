@@ -132,12 +132,12 @@ func drawSpritesColumn(screen screen.Screen, col int, angle Degree, distanceToWa
 // Draws one column for specific sprite on screen
 func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, angle Degree, distanceToWall float64) {
 	if playerDistToSprite(sprite) < distanceToWall {
-		sees, sP := seesSprite(screen, angle, sprite)
+		sees, sP := seesSprite(angle, sprite)
 		if !sees {
 			return
 		}
 
-		spriteHeight := int(float64(distToHeight(playerDistToSprite(sprite), screen.Height()))*sprite.Scale/2)
+		spriteHeight := int(float64(distToHeight(playerDistToSprite(sprite), screen.Height())) * sprite.Scale / 2)
 		if spriteHeight == 0 {
 			spriteHeight = 1 // If scale is set to something really low we could end up with 0 height
 		}
@@ -173,7 +173,7 @@ func calculateSpriteStart(screen screen.Screen, sprite Sprite, spriteHeight int)
 // Detects if a sprite on specific angle is visible to the camera
 //
 // spritePoint - where on sprite's plane is hit (0.0-1.0)
-func seesSprite(screen screen.Screen, angle Degree, sprite Sprite) (hit bool, spritePoint float64) {
+func seesSprite(angle Degree, sprite Sprite) (hit bool, spritePoint float64) {
 	angleDiff := float64(int(angle.Get()-playerAngleToSprite(sprite).Get()+180+360)%360 - 180)
 	angleOffset := 18 / playerDistToSprite(sprite) * sprite.Scale
 
@@ -201,5 +201,20 @@ func playerAngleToSprite(sprite Sprite) Degree {
 
 // Calculates distance between player and the sprite
 func playerDistToSprite(sprite Sprite) float64 {
-	return math.Sqrt((sprite.X-curX)*(sprite.X-curX) + (sprite.Y-curY)*(sprite.Y-curY))
+	return distToSprite(curX, curY, sprite)
+}
+
+// Calculates distance to sprite from the given points
+func distToSprite(x, y float64, sprite Sprite) float64 {
+	return math.Sqrt((sprite.X-x)*(sprite.X-x) + (sprite.Y-y)*(sprite.Y-y))
+}
+
+// Calculates if the given point intersects with any sprite
+func intersectsWithSprite(x, y float64) (intersects bool) {
+	for _, sprite := range sprites {
+		if distToSprite(x, y, *sprite) < sprite.Scale/2 {
+			return true
+		}
+	}
+	return false
 }
