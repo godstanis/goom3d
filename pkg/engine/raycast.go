@@ -5,7 +5,7 @@ import (
 	"math"
 )
 
-// Casts a ray with angle (0-360) and returns (hit status, hit distance (0 default), hit title value (0 default), distance is the max length of a ray
+// Casts a ray with angle (0-360) and returns (hit status, hit distance (passed distance is default), hit title value (0 default), distance is the max length of a ray
 //
 // 0 angle is UP, 90 is RIGHT and so on (360 is the same as 0)
 // (x0,y0,x1,y1) - vector (x0,y0 is a ray starting point)
@@ -21,7 +21,7 @@ func rayCast(x0, y0 float64, angle Degree, distance float64) (hit bool, dist flo
 		}
 		length += step
 	}
-	return false, 0.0, 0.0, 0.0
+	return false, distance, 0.0, 0.0
 }
 
 // Returns vector's and coordinate (vector is a starting position, angle and distance)

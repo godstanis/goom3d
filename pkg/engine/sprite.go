@@ -16,6 +16,7 @@ const (
 type Sprite struct {
 	X, Y    float64
 	Align   int
+	Scale   float64
 	Texture [][]string
 }
 
@@ -30,7 +31,7 @@ var sprites = []*Sprite{
 }
 
 var lampSprite = Sprite{
-	X: 1.4, Y: 2.5, Texture: [][]string{
+	X: 1.4, Y: 2.5, Scale: 1, Texture: [][]string{
 		{"X", "X", "X", "-", "-", "X", "X", "X"},
 		{"X", "X", "X", "|", "|", "X", "X", "X"},
 		{"O", "X", "X", "%", "%", "X", "X", "O"},
@@ -44,7 +45,7 @@ var lampSprite = Sprite{
 }
 
 var boxSprite = Sprite{
-	X: 1.2, Y: 1.2, Texture: [][]string{
+	X: 1.2, Y: 1.2, Scale: 1, Texture: [][]string{
 		{"X", "X", "X", "X", "X", "X", "X", "X"},
 		{"X", "X", "=", "=", "=", "=", "X", "X"},
 		{"X", "|", "-", "-", "-", "-", "|", "X"},
@@ -58,7 +59,7 @@ var boxSprite = Sprite{
 }
 
 var box2Sprite = Sprite{
-	X: 1.5, Y: 1.7, Texture: [][]string{
+	X: 1.5, Y: 1.7, Scale: 1, Texture: [][]string{
 		{"X", "X", "X", "X", "X", "X", "X", "X"},
 		{"X", "X", "=", "=", "=", "=", "X", "X"},
 		{"X", "|", "-", "-", "-", "-", "|", "X"},
@@ -72,7 +73,7 @@ var box2Sprite = Sprite{
 }
 
 var tableSprite = Sprite{
-	X: 1.4, Y: 2.5, Texture: [][]string{
+	X: 1.4, Y: 2.5, Scale: 1, Texture: [][]string{
 		{"X", "X", "X", "X", "X", "X", "X"},
 		{"X", "=", "=", "=", "=", "=", "="},
 		{"=", "=", "=", "=", "=", "=", "|"},
@@ -86,7 +87,7 @@ var tableSprite = Sprite{
 }
 
 var chairSprite = Sprite{
-	X: 1.4, Y: 2.1, Texture: [][]string{
+	X: 1.4, Y: 2.1, Scale: 1, Texture: [][]string{
 		{"X", "X", "X", "-", "X"},
 		{"X", "X", "X", "|", "X"},
 		{"X", "X", "X", "|", "X"},
@@ -100,7 +101,7 @@ var chairSprite = Sprite{
 }
 
 var paintingSprite = Sprite{
-	X: 2.55, Y: 1.41, Texture: [][]string{
+	X: 2.55, Y: 1.41, Scale: 1, Texture: [][]string{
 		{"#", "-", "-", "-", "-", "-", "-", "-", "-", "-", "#"},
 		{"|", "▒", "▒", "░", "░", "░", "▓", "▓", "▓", "░", "|"},
 		{"|", "▒", "▒", "░", "░", "░", "▓", "▓", "░", "░", "|"},
@@ -136,7 +137,10 @@ func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, angle Degree
 			return
 		}
 
-		spriteHeight := distToHeight(playerDistToSprite(sprite), screen.Height()) / 2
+		spriteHeight := int(float64(distToHeight(playerDistToSprite(sprite), screen.Height()))*sprite.Scale/2)
+		if spriteHeight == 0 {
+			spriteHeight = 1 // If scale is set to something really low we could end up with 0 height
+		}
 		spriteScreenRow := calculateSpriteStart(screen, sprite, spriteHeight)
 		spriteCol := int(math.Round(sP * float64(len(sprite.Texture[0])-1)))
 
@@ -171,7 +175,7 @@ func calculateSpriteStart(screen screen.Screen, sprite Sprite, spriteHeight int)
 // spritePoint - where on sprite's plane is hit (0.0-1.0)
 func seesSprite(screen screen.Screen, angle Degree, sprite Sprite) (hit bool, spritePoint float64) {
 	angleDiff := float64(int(angle.Get()-playerAngleToSprite(sprite).Get()+180+360)%360 - 180)
-	angleOffset := (float64(screen.Width()) / 10) / playerDistToSprite(sprite) / 2 // todo: investigate skewing artifacts on resolution changes
+	angleOffset := 18 / playerDistToSprite(sprite) * sprite.Scale
 
 	if !(angleDiff >= -angleOffset && angleDiff <= angleOffset) {
 		return false, 0
