@@ -49,7 +49,11 @@ func IntersectsWithMap(x, y float64) (intersects bool, tile int, tilePoint float
 	if gridX >= 0 && gridY >= 0 && gridY < float64(len(Map)) && gridX < float64(len(Map[0])) {
 		if (x >= gridX) && (x <= gridX+1) && (y >= gridY) && (y <= gridY+1) { // if point is in square boundaries
 			if tile := Map[int(gridY)][int(gridX)]; tile > 0 {
-				return true, tile, getTilePoint(x, y)
+				gX, gY := intersectToGrid(x, y) // Round x or y to closest axis
+				if gX == gridX+1 || gY == gridY { // We should inverse texture for this case
+					return true, tile, 1 - getTilePoint(gX, gY)
+				}
+				return true, tile, getTilePoint(gX, gY)
 			}
 		}
 	}
@@ -60,16 +64,12 @@ func IntersectsWithMap(x, y float64) (intersects bool, tile int, tilePoint float
 // Determines current tile hit point relative to it's plane (for example 0.3 means we've hit 0/3 point of a wall)
 //
 // For example we have point X:3.2;Y:3.9. It's obvious that if we stick it to our grid it is 3.2, 4.
-func getTilePoint(x, y float64) (tilePoint float64) {
-	gridX, gridY := intersectToGrid(x, y)
-
-	pointX := gridX - float64(int(x))
-	pointY := gridY - float64(int(y))
-
-	if gridX != x {
-		return math.Abs(pointY)
+func getTilePoint(gridX, gridY float64) (tilePoint float64) {
+	baseX := float64(int(gridX))
+	if gridX == baseX {
+		return math.Abs(gridY - float64(int(gridY)))
 	}
-	return math.Abs(pointX)
+	return math.Abs(gridX - baseX)
 }
 
 // Because we use lazy raycasting with steps, we should perform additional rounding to get exact intersection with our grid (i.e. walls)
