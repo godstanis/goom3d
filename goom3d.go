@@ -16,7 +16,7 @@ func main() {
 
 	go handleKeys() // Run our input controls in a separate goroutine
 	for {
-		engine.RenderView(&symScreen)
+		engine.RenderView(symScreen)
 	}
 }
 

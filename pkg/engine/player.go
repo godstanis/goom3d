@@ -21,7 +21,7 @@ func TurnPlayer(dAngle float64) {
 
 // Moves player vertically (forward, backward) by a given dist (related to it's angle)
 func StrafePlayerV(dDist float64) {
-	nextX, nextY := getVectorEnd(curX, curY, curAngle, dDist)
+	nextX, nextY := increaseDegreeVector(curX, curY, curAngle, dDist)
 	if CollidesWithAnything(nextX, nextY) {
 		return
 	}
@@ -30,7 +30,7 @@ func StrafePlayerV(dDist float64) {
 
 // Moves player horizontally (left, right) by a given dist (related to it's angle)
 func StrafePlayerH(dDist float64) {
-	nextX, nextY := getVectorEnd(curX, curY, Degree{curAngle.Plus(90)}, dDist)
+	nextX, nextY := increaseDegreeVector(curX, curY, Degree{curAngle.Plus(90)}, dDist)
 	if CollidesWithAnything(nextX, nextY) {
 		return
 	}

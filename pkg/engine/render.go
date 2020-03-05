@@ -4,6 +4,7 @@ package engine
 import (
 	"fmt"
 	"github.com/godstanis/goom3d/pkg/screen"
+	"math"
 	"time"
 )
 
@@ -58,7 +59,7 @@ func drawWorld(screen screen.Screen) {
 	// Traverse each row of our screen, cast a ray and render it to screen buffer
 	for i := 0; i <= screen.Width(); i++ {
 		traversed := float64(i) / float64(screen.Width()) // How much of a screen space has been traversed (0.0 to 1.0, i.e. 0.3 is 30%)
-		angle := Degree{}.NewDegree(lAngle.Get()+(curFov*traversed))
+		angle := Degree{}.NewDegree(lAngle.Get() + (curFov * traversed))
 		hit, distance, tile, tileP := rayCast(curX, curY, angle, viewDistance)
 
 		if hit {
@@ -77,10 +78,12 @@ func drawTexturedWallColumn(screen screen.Screen, tile int, i int, height int, t
 		offset = (screen.Height() - height) / 2
 	}
 
-	scaledTextureRow := scaleTileTextureCol(tile, height, tileP)
+	col := int(math.Round(float64(len(TileTextures[tile][0])-1) * tileP))
+	scaledTexture := scaleStringTextureVertically(TileTextures[tile], height)
 
-	for j := offset; j < screen.Height()-offset-1; j++ {
-		_ = screen.SetPixel(i, j, scaledTextureRow[textureOffset])
+	end := screen.Height() - offset - 1
+	for j := offset; j < end; j++ {
+		_ = screen.SetPixel(i, j, scaledTexture[textureOffset][col])
 		textureOffset++
 	}
 }

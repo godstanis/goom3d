@@ -9,14 +9,14 @@ import (
 type Symbol [][]string
 
 // NewScreen: empty screen initializer with buffer of empty pixels
-func (scr Symbol) NewScreen(w, h int) Symbol {
+func (scr Symbol) NewScreen(w, h int) Screen {
 	screen := Symbol(make([][]string, h))
 	for i := 0; i < h; i++ {
 		for j := 0; j < w; j++ {
 			screen[i] = append(screen[i], "  ")
 		}
 	}
-	return screen
+	return &screen
 }
 
 // Clear: clears the screen

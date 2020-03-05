@@ -15,8 +15,10 @@ import (
 func rayCast(x0, y0 float64, angle Degree, distance float64) (hit bool, dist float64, tile int, tileP float64) {
 	length := 0.0 // Length of hit check
 	step := 0.01  // Interval of collision checking
+	// We dont want to calculate sin/cos for each hit point so we only prepare a simplified vector for increaseVector func
+	sX, sY := increaseDegreeVector(x0, y0, angle, -1)
 	for length <= distance {
-		if hit, tile, tileP := IntersectsWithMap(getVectorEnd(x0, y0, angle, length)); hit {
+		if hit, tile, tileP := IntersectsWithMap(increaseVector(sX, sY, x0, y0, length)); hit {
 			return true, length, tile, tileP
 		}
 		length += step
@@ -24,22 +26,31 @@ func rayCast(x0, y0 float64, angle Degree, distance float64) (hit bool, dist flo
 	return false, distance, 0.0, 0.0
 }
 
+// Gets next point for vector by length
+func increaseVector(x0, y0, x1, y1, length float64) (x, y float64) {
+	dX, dY := x1-x0, y1-y0
+	mg := math.Sqrt(dX*dX + dY*dY)
+	uX, uY := dX/mg, dY/mg
+
+	return x1 + uX*length, y1 + uY*length
+}
+
 // Returns vector's and coordinate (vector is a starting position, angle and distance)
 // angle - degrees
-func getVectorEnd(x, y float64, angle Degree, length float64) (float64, float64) {
+func increaseDegreeVector(x, y float64, angle Degree, length float64) (float64, float64) {
 	rads := angle.Get() * (math.Pi / 180)
 	return length*math.Cos(rads) + x, length*math.Sin(rads) + y
 }
 
 // Returns intersect status and tile value
 func IntersectsWithMap(x, y float64) (intersects bool, tile int, tilePoint float64) {
-	gridX := int(x)
-	gridY := int(y)
+	gridX, gridY := math.Floor(x), math.Floor(y)
 
-	if gridX >= 0 && gridY >= 0 && gridY < len(Map) && gridX < len(Map[0]) && Map[gridY][gridX] >= 1 {
-		pointInBox := (x >= float64(gridX)) && (x <= float64(gridX)+1) && (y >= float64(gridY)) && (y <= float64(gridY)+1)
-		if pointInBox {
-			return true, Map[gridY][gridX], getTilePoint(x, y)
+	if gridX >= 0 && gridY >= 0 && gridY < float64(len(Map)) && gridX < float64(len(Map[0])) {
+		if (x >= gridX) && (x <= gridX+1) && (y >= gridY) && (y <= gridY+1) { // if point is in square boundaries
+			if tile := Map[int(gridY)][int(gridX)]; tile > 0 {
+				return true, tile, getTilePoint(x, y)
+			}
 		}
 	}
 
