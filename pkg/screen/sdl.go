@@ -97,7 +97,7 @@ func (scr *Sdl2) Render() {
 	scr.Clear()
 }
 
-// Render: renders screen to sdl window
+// check: service method to panic on errors
 func (scr Sdl2) check(err error) {
 	if err != nil {
 		panic(err)
