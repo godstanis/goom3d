@@ -22,7 +22,7 @@ jobs:
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
-        fi; sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev
+        fi; sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev; apt install libsdl2{,-image,-mixer,-ttf,-gfx}-dev
 
     - name: Build
       run: go build -v .
