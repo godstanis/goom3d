@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"github.com/godstanis/goom3d/pkg/engine"
 	"github.com/godstanis/goom3d/pkg/screen"
 	"github.com/robotn/gohook"
@@ -12,12 +13,23 @@ var rotateSpeed, walkSpeed = 4.0, 0.07
 func main() {
 	engine.Map = engine.WorldMap
 	engine.SetPlayerPosition(2.3, 2.6, engine.Degree{}.NewDegree(180.0))
-	symScreen := screen.Console{}.NewScreen(sWidth, sHeight)
+
+	output := getScreen()
 
 	go handleKeys() // Run our input controls in a separate goroutine
 	for {
-		engine.RenderView(symScreen)
+		engine.RenderView(output)
 	}
+}
+
+// Creates screen depending on run flags
+func getScreen() screen.Screen {
+	runSdl2 := flag.Bool("sdl2", false, "a string")
+	flag.Parse()
+	if *runSdl2 {
+		return screen.Sdl2{}.NewScreen(sWidth*2, sHeight*2)
+	}
+	return screen.Console{}.NewScreen(sWidth, sHeight)
 }
 
 // Handles keyboard input
