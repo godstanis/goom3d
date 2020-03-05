@@ -2,3 +2,5 @@ github.com/robotn/gohook v0.0.0-20200227150421-858d3206aeb6 h1:Fri3n8mTWM/ixkQA6
 github.com/robotn/gohook v0.0.0-20200227150421-858d3206aeb6/go.mod h1:VUHyXb+4yA0DJQs+jaC2jWs+J7s6StlztBgwDkcEZT4=
 github.com/vcaesar/tt v0.0.0-20200219144246-a190abe69d64 h1:MwxT8hyvPcPafJ2LDmoFuH7Xpz5LZ6W3dKzwVQAHD/k=
 github.com/vcaesar/tt v0.0.0-20200219144246-a190abe69d64/go.mod h1:GHPxQYhn+7OgKakRusH7KJ0M5MhywoeLb8Fcffs/Gtg=
+github.com/veandco/go-sdl2 v0.4.1 h1:HmSBvVmKWI8LAOeCfTTM8R33rMyPcs6U3o8n325c9Qg=
+github.com/veandco/go-sdl2 v0.4.1/go.mod h1:FB+kTpX9YTE+urhYiClnRzpOXbiWgaU3+5F2AB78DPg=

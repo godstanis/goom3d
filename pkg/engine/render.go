@@ -42,14 +42,14 @@ func RenderView(screen screen.Screen) {
 	start := time.Now()
 	drawWorld(screen)
 	drawUI(screen)
-	renderToConsole(screen, fmt.Sprintf("FPS: %6.4f; POV:%4.2f; FOV:%4.2f, player_pos:(X:%9.4f,Y:%9.4f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
+	renderToScreen(screen, fmt.Sprintf("FPS: %6.4f; POV:%4.2f; FOV:%4.2f, player_pos:(X:%9.4f,Y:%9.4f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
 }
 
-// renderToConsole: actually transfer screen buffer to console stdout
-func renderToConsole(screen screen.Screen, footer string) {
+// renderToScreen: actually transfer screen buffer to screen output
+func renderToScreen(screen screen.Screen, footer string) {
+	screen.Render()
 	fmt.Printf("\033[%d;%dH", 0, 0)
-	fmt.Println(screen.String() + "\n" + footer + "\n" + renderDebugInfo)
-	screen.Clear()
+	fmt.Println(footer + "\n" + renderDebugInfo)
 }
 
 // Draws actual rendered world objects

@@ -5,20 +5,20 @@ type Screen interface {
 	NewScreen(w, h int) Screen
 	Height() int
 	Width() int
+	// todo: unify to abstract pixel value (hex uint32 maybe?) [Strings for now because they are easier to manage at this stage]
 	SetPixel(x, y int, pixel string) error
-	GetPixel(x, y int) string
 	Clear()
-	String() string
+	Render()
 }
 
 // Dummy screen with no functionality for debug purposes
-type DummyScreen struct{
-	w,h int
+type DummyScreen struct {
+	w, h int
 }
 
 // NewScreen: empty screen initializer with buffer of empty pixels
 func (scr DummyScreen) NewScreen(w, h int) Screen {
-	return &DummyScreen{w:w, h:h}
+	return &DummyScreen{w: w, h: h}
 }
 
 // Clear: clears the screen
@@ -41,12 +41,7 @@ func (scr *DummyScreen) SetPixel(x, y int, symbol string) error {
 	return nil
 }
 
-// GetPixel: returns pixel value
-func (scr DummyScreen) GetPixel(x, y int) string {
-	return ""
-}
-
-// String: converts screen data to one string
-func (scr DummyScreen) String() string {
-	return ""
+// Render: renders screen content
+func (scr *DummyScreen) Render() {
+	return
 }

@@ -16,9 +16,9 @@ func drawCrosshair(screen screen.Screen) {
 	crosshairTexture := [][]string{
 		{"", "", "", "", ""},
 		{"", "", "", "", ""},
-		{"-", "", "", "", "-"},
+		{"W", "", "", "", "W"},
 		{"", "", "", "", ""},
-		{"", "", "|", "", ""},
+		{"", "", "W", "", ""},
 	}
 	offsetX := (screen.Width() / 2) - len(crosshairTexture[0])/2
 	offsetY := (screen.Height() / 2) - len(crosshairTexture)/2
@@ -38,13 +38,13 @@ func drawMinimap(screen screen.Screen) {
 	for rI, row := range Map {
 		for tI, tile := range row {
 			if int(curY) == rI && int(curX) == tI {
-				_ = screen.SetPixel(tI+offset, rI+offset, fmt.Sprintf("%s", "▓"))
+				_ = screen.SetPixel(tI+offset, rI+offset, fmt.Sprintf("%s", "G"))
 				continue
 			}
 			if tile == 0 {
-				_ = screen.SetPixel(tI+offset, rI+offset, " ")
-			} else {
 				_ = screen.SetPixel(tI+offset, rI+offset, "░")
+			} else {
+				_ = screen.SetPixel(tI+offset, rI+offset, "▒")
 			}
 
 		}

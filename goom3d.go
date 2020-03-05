@@ -12,7 +12,7 @@ var rotateSpeed, walkSpeed = 4.0, 0.07
 func main() {
 	engine.Map = engine.WorldMap
 	engine.SetPlayerPosition(2.3, 2.6, engine.Degree{}.NewDegree(180.0))
-	symScreen := screen.Symbol{}.NewScreen(sWidth, sHeight)
+	symScreen := screen.Console{}.NewScreen(sWidth, sHeight)
 
 	go handleKeys() // Run our input controls in a separate goroutine
 	for {
