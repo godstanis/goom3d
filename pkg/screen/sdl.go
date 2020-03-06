@@ -30,15 +30,12 @@ func (scr Sdl2) NewScreen(w, h int) Screen {
 }
 
 // SetPixel: puts a pixel on screen
-func (scr *Sdl2) SetPixel(x, y int, symbol string) error {
-	if _, ok := screenColorsLookup[symbol]; !ok {
-		symbol = " "
-	}
+func (scr *Sdl2) SetPixel(x, y int, symbol uint32) error {
 
 	rect := sdl.Rect{X: int32(x * scr.pixelScale), Y: int32(y * scr.pixelScale), W: int32(scr.pixelScale), H: int32(scr.pixelScale)}
 	surface, err := scr.window.GetSurface()
 	scr.check(err)
-	err = surface.FillRect(&rect, screenColorsLookup[symbol])
+	err = surface.FillRect(&rect, symbol)
 	scr.check(err)
 	return nil
 }
@@ -58,9 +55,9 @@ func (scr *Sdl2) Clear() {
 
 	surface, err := scr.window.GetSurface()
 	scr.check(err)
-	err = surface.FillRect(&sdl.Rect{W: int32(scr.Width() * scr.pixelScale), H: int32(scr.Height() * scr.pixelScale)}, screenColorsLookup["Sky"])
+	err = surface.FillRect(&sdl.Rect{W: int32(scr.Width() * scr.pixelScale), H: int32(scr.Height() * scr.pixelScale)}, CL_SKY)
 	scr.check(err)
-	err = surface.FillRect(&sdl.Rect{Y: int32(scr.Height()*scr.pixelScale) / 2, W: int32(scr.Width() * scr.pixelScale), H: int32(scr.Height() * scr.pixelScale)}, screenColorsLookup["Ground"])
+	err = surface.FillRect(&sdl.Rect{Y: int32(scr.Height()*scr.pixelScale) / 2, W: int32(scr.Width() * scr.pixelScale), H: int32(scr.Height() * scr.pixelScale)}, CL_GROUND)
 	scr.check(err)
 
 	return

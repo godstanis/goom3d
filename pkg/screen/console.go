@@ -31,13 +31,9 @@ func (scr Console) NewScreen(w, h int) Screen {
 }
 
 // SetPixel: puts a pixel on screen
-func (scr *Console) SetPixel(x, y int, symbol string) error {
-	color, ok := screenColorsLookup[symbol]
-	if !ok {
-		color = uint32(tcell.ColorBlack.Hex())
-	}
+func (scr *Console) SetPixel(x, y int, symbol uint32) error {
 
-	scr.Screen.SetContent(x, y, ' ', nil, tcell.StyleDefault.Background(tcell.NewHexColor(int32(color))))
+	scr.Screen.SetContent(x, y, ' ', nil, tcell.StyleDefault.Background(tcell.NewHexColor(int32(symbol))))
 	return nil
 }
 
@@ -52,9 +48,9 @@ func (scr *Console) Clear() {
 	for i := 0; i <= scr.Height(); i++ {
 		for j := 0; j <= scr.Width(); j++ {
 			if i <= scr.Height()/2-1 {
-				_ = scr.SetPixel(j, i, "Sky")
+				_ = scr.SetPixel(j, i, CL_SKY)
 			} else {
-				_ = scr.SetPixel(j, i, "Ground")
+				_ = scr.SetPixel(j, i, CL_GROUND)
 			}
 		}
 	}
