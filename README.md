@@ -16,4 +16,4 @@ Pseudo-3d (inspired by wolfenstein 3d) first person shooter written in go
     - [ ] AI:
       - [ ] Enemies (hitboxes, collision boxes e.t.c.)
       - [ ] Simple horde ai
-      - [ ] Simple Idle/Attach ai implementation
+      - [ ] Simple Idle/Attack ai implementation
