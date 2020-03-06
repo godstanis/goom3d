@@ -1,33 +1,60 @@
 package screen
 
 import (
-	"errors"
-	"fmt"
-	"strings"
+	"github.com/gdamore/tcell"
+	"os"
 )
 
 // Console represents symbols screen buffer (where each pixel is symbol)
-type Console [][]string
+type Console struct {
+	Screen tcell.Screen
+}
 
 // NewScreen: empty screen initializer with buffer of empty pixels
 func (scr Console) NewScreen(w, h int) Screen {
-	screen := Console(make([][]string, h))
-	for i := 0; i < h; i++ {
-		for j := 0; j < w; j++ {
-			screen[i] = append(screen[i], "  ")
-		}
+	tcell.SetEncodingFallback(tcell.EncodingFallbackASCII)
+	s, err := tcell.NewScreen()
+	if err != nil {
+		panic(err)
 	}
+	if err = s.Init(); err != nil {
+		panic(err)
+	}
+
+	s.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorWhite).Background(tcell.ColorBlack).Bold(true))
+	s.Clear()
+	screen := Console{Screen: s}
+
+	screen.runControlsMonitor()
+
 	return &screen
+}
+
+// SetPixel: puts a pixel on screen
+func (scr *Console) SetPixel(x, y int, symbol string) error {
+	color, ok := screenColorsLookup[symbol]
+	if !ok {
+		color = uint32(tcell.ColorBlack.Hex())
+	}
+
+	scr.Screen.SetContent(x, y, ' ', nil, tcell.StyleDefault.Background(tcell.NewHexColor(int32(color))))
+	return nil
+}
+
+// Render: renders screen to console
+func (scr *Console) Render() {
+	scr.Screen.Show()
+	scr.Clear()
 }
 
 // Clear: clears the screen
 func (scr *Console) Clear() {
-	for i, val := range *scr {
-		for j := range val {
-			if i <= len(*scr)/2 {
-				_ = scr.SetPixel(j, i, " ")
+	for i := 0; i <= scr.Height(); i++ {
+		for j := 0; j <= scr.Width(); j++ {
+			if i <= scr.Height()/2-1 {
+				_ = scr.SetPixel(j, i, "Sky")
 			} else {
-				_ = scr.SetPixel(j, i, "_") // Floor
+				_ = scr.SetPixel(j, i, "Ground")
 			}
 		}
 	}
@@ -35,39 +62,34 @@ func (scr *Console) Clear() {
 
 // Height: get current screen height
 func (scr Console) Height() int {
-	return len(scr)
+	_, h := scr.Screen.Size()
+	return h
 }
 
 // Width: get current screen width
 func (scr Console) Width() int {
-	return len(scr[0])
+	w, _ := scr.Screen.Size()
+	return w
 }
 
-// SetPixel: puts a pixel on screen
-func (scr *Console) SetPixel(x, y int, symbol string) error {
-	if scr.Width() <= x || scr.Height() <= y {
-		//fmt.Printf("Pixel is out of bounds! x:%d, y:%d, height:%d, width: %d\n", x,y,scr.Height(), scr.Width())
-		return errors.New("pixel is out of bounds")
-	}
-	if symbol == "" {
-		symbol = "XX"
-	}
-	(*scr)[y][x] = symbol + symbol
-	return nil
-}
-
-// Render: renders screen to console
-func (scr *Console) Render() {
-	fmt.Printf("\033[%d;%dH", 0, 0)
-	fmt.Println(scr.string())
-	scr.Clear()
-}
-
-// String: converts screen data to one string
-func (scr Console) string() string {
-	var res string
-	for _, str := range scr {
-		res += strings.Join(str, "") + "\n"
-	}
-	return res
+// runControlsMonitor: service method for main screen event listeners
+func (scr Console) runControlsMonitor() {
+	// Some controls
+	go func() {
+		for {
+			ev := scr.Screen.PollEvent()
+			switch ev := ev.(type) {
+			case *tcell.EventKey:
+				switch ev.Key() {
+				case tcell.KeyCtrlC, tcell.KeyEscape:
+					scr.Screen.Fini()
+					os.Exit(0) // Gracefully exit the program
+				case tcell.KeyCtrlL:
+					scr.Screen.Sync()
+				}
+			case *tcell.EventResize:
+				scr.Screen.Sync()
+			}
+		}
+	}()
 }

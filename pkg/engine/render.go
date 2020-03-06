@@ -42,7 +42,7 @@ func RenderView(screen screen.Screen) {
 	start := time.Now()
 	drawWorld(screen)
 	drawUI(screen)
-	renderToScreen(screen, fmt.Sprintf("FPS: %6.4f; POV:%4.2f; FOV:%4.2f, player_pos:(X:%9.4f,Y:%9.4f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
+	renderToScreen(screen, fmt.Sprintf("FPS: %6.2f; POV:%4.2f; FOV:%4.2f, player_pos:(X:%9.4f,Y:%9.4f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
 }
 
 // renderToScreen: actually transfer screen buffer to screen output
@@ -82,8 +82,10 @@ func drawTexturedWallColumn(screen screen.Screen, tile int, i int, height int, t
 	scaledTexture := scaleStringTextureVertically(TileTextures[tile], height)
 
 	end := screen.Height() - offset - 1
-	for j := offset; j < end; j++ {
-		_ = screen.SetPixel(i, j, scaledTexture[textureOffset][col])
+	for j := offset; j <= end; j++ {
+		if textureOffset < height {
+			_ = screen.SetPixel(i, j, scaledTexture[textureOffset][col])
+		}
 		textureOffset++
 	}
 }

@@ -7,7 +7,6 @@ import (
 	"github.com/robotn/gohook"
 )
 
-var sWidth, sHeight = 80, 50
 var rotateSpeed, walkSpeed = 4.0, 0.07
 
 func main() {
@@ -15,7 +14,6 @@ func main() {
 	engine.SetPlayerPosition(2.3, 2.6, engine.Degree{}.NewDegree(180.0))
 
 	output := getScreen()
-
 	go handleKeys() // Run our input controls in a separate goroutine
 	for {
 		engine.RenderView(output)
@@ -27,9 +25,9 @@ func getScreen() screen.Screen {
 	runSdl2 := flag.Bool("sdl2", false, "a string")
 	flag.Parse()
 	if *runSdl2 {
-		return screen.Sdl2{}.NewScreen(sWidth*2, sHeight*2)
+		return screen.Sdl2{}.NewScreen(300, 180)
 	}
-	return screen.Console{}.NewScreen(sWidth, sHeight)
+	return screen.Console{}.NewScreen(0, 0) // Console is auto-sized
 }
 
 // Handles keyboard input
