@@ -179,12 +179,11 @@ func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, angle Degree
 		}
 		spriteScreenRow := calculateSpriteStart(screen, sprite, spriteHeight)
 		spriteCol := int(math.Round(sP * float64(len(sprite.Texture[0])-1)))
-
+		scaledTexture := scaleStringTextureVertically(sprite.Texture, spriteHeight+1)
 		for i := 0; i <= spriteHeight; i++ {
 			if spriteScreenRow >= 0 {
-				spriteRow := int(math.Round((float64(i) / float64(spriteHeight)) * float64(len(sprite.Texture)-1)))
-				if sprite.Texture[spriteRow][spriteCol] != " " {
-					_ = screen.SetPixel(col, spriteScreenRow, sprite.Texture[spriteRow][spriteCol])
+				if scaledTexture[i][spriteCol] != " " {
+					_ = screen.SetPixel(col, spriteScreenRow, scaledTexture[i][spriteCol])
 				}
 			}
 			spriteScreenRow++
@@ -210,14 +209,17 @@ func calculateSpriteStart(screen screen.Screen, sprite Sprite, spriteHeight int)
 //
 // spritePoint - where on sprite's plane is hit (0.0-1.0)
 func seesSprite(angle Degree, sprite Sprite) (hit bool, spritePoint float64) {
-	angleDiff := float64(int(angle.Get()-playerAngleToSprite(sprite).Get()+180+360)%360 - 180)
+	angleDiff := angle.Plus(-playerAngleToSprite(sprite).Get())
 	angleOffset := 18 / playerDistToSprite(sprite) * sprite.Scale
 
-	if !(angleDiff >= -angleOffset && angleDiff <= angleOffset) {
-		return false, 0
+	if angleDiff >0 && angleDiff<angleOffset{
+		return true, (angleDiff + angleOffset) / (angleOffset * 2)
 	}
-	// Calculate point relation to hit
-	return true, (angleDiff + angleOffset) / (angleOffset * 2)
+	if angleDiff > 360-angleOffset {
+		angleDiff = angleDiff-360
+		return true, (angleDiff + angleOffset) / (angleOffset * 2)
+	}
+	return false, 0
 }
 
 // Calculates angle between a player and the sprite
