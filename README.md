@@ -18,13 +18,13 @@ Raycasting technique used in this project is a bit simplified for the sake of re
 
 Textures should properly be scaled and projected. Horizontal scaling is actually done already at the raycast phase so we only care for horizontal projection. The one used in this project is really simple, it is closer to commonly-known `Nearest-neighbor interpolation`.
 
-The main problem is not to project scaled-down image, but to make **scaled up** image to clip properly between our screen boundaries, this problem is addressed by calculating negative-positive offsets and applying them on row renders. You can find more info in the project's code or in google.
+The main problem is not to project scaled-down images, but to make **scaled up** images clip properly between our screen boundaries, this problem is addressed by calculating negative-positive offsets and applying them on row renders. You can find more info in the project's code or in google.
 
 ### Sprites
 
-Sprites are quite tricky to implement in such an engine. The part of the problem is they are not so 2D as you may think. Techniques of implementing them in 2D and 3D are quite simmilar, but... we dont have that Z axis.
+Sprites are quite tricky to implement in such an engine. The part of the problem is they are not so 2D as you may think. Techniques of implementing them in 2D and 3D are quite similar, but... we don't have that Z-axis.
 
-The only available data is our player position, his view angle and sprite position and size, and so, to actually project it on our screen we have to calculate the distance to the sprite, and we should determine the relation of current renderring screen row to angles of two sides of the sprite (yeah, the center position is not enough). I dont actually calculate those angles and i use some magic to project them, you can learn more by looking at `sprite.go` code c:
+The only available data is our player position, his view angle and sprite position plus it's size, and so, to actually project it on our screen we have to calculate the distance to the sprite, and we should determine the relation of current rendering screen row to angles of two sides of the sprite (yeah, the center position is not enough). I don't actually calculate those angles and I use some magic to project them, you can learn more by looking at `sprite.go` code c:
 
 # Graphics
 
