@@ -6,6 +6,7 @@ import (
 	"sort"
 )
 
+// Sprite alignment
 const (
 	CenterAlign = iota
 	TopAlign
@@ -17,150 +18,21 @@ type Sprite struct {
 	X, Y    float64
 	Align   int
 	Scale   float64
-	Texture [][]string
+	Texture [][]uint32
+	Solid   bool
 }
 
-// sprites information for map
-var sprites = []*Sprite{
-	&lampSprite,
-	&boxSprite,
-	&box2Sprite,
-	&paintingSprite,
-	&tableSprite,
-	&chairSprite,
-	&human,
-}
-
-var lampSprite = Sprite{
-	X: 1.4, Y: 2.5, Scale: 1, Texture: [][]string{
-		{" ", " ", " ", "-", "-", " ", " ", " "},
-		{" ", " ", " ", "|", "|", " ", " ", " "},
-		{"O", " ", " ", "Y", "Y", " ", " ", "O"},
-		{"Y", "Y", " ", "Y", "Y", " ", "Y", "Y"},
-		{" ", " ", "Y", "Y", "Y", "Y", " ", " "},
-		{" ", " ", " ", "Y", "Y", " ", " ", " "},
-		{" ", " ", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", " ", " ", " ", " "},
-	},
-	Align: TopAlign,
-}
-
-var boxSprite = Sprite{
-	X: 1.2, Y: 1.2, Scale: 1, Texture: [][]string{
-		{" ", " ", " ", " ", " ", " ", " ", " "},
-		{" ", " ", "=", "=", "=", "=", " ", " "},
-		{" ", "|", "Y", "Y", "Y", "Y", "|", " "},
-		{"|", "Y", "Y", "Y", "Y", "Y", "Y", "|"},
-		{"|", "Y", "Y", "G", "Y", "Y", "Y", "|"},
-		{" ", "|", "Y", "Y", "Y", "Y", "|", " "},
-		{" ", " ", "=", "=", "=", "=", " ", " "},
-		{" ", " ", " ", " ", " ", " ", " ", " "},
-	},
-	Align: BottomAlign,
-}
-
-var box2Sprite = Sprite{
-	X: 1.5, Y: 1.7, Scale: 1, Texture: [][]string{
-		{" ", " ", " ", " ", " ", " ", " ", " "},
-		{" ", " ", "=", "=", "=", "=", " ", " "},
-		{" ", "|", "Y", "Y", "Y", "Y", "|", " "},
-		{"|", "Y", "Y", "Y", "Y", "G", "Y", "|"},
-		{"|", "Y", "Y", "Y", "Y", "Y", "Y", "|"},
-		{" ", "|", "Y", "Y", "Y", "Y", "|", " "},
-		{" ", " ", "=", "=", "=", "=", " ", " "},
-		{" ", " ", " ", " ", " ", " ", " ", " "},
-	},
-	Align: BottomAlign,
-}
-
-var tableSprite = Sprite{
-	X: 1.4, Y: 2.5, Scale: 1, Texture: [][]string{
-		{" ", " ", " ", " ", " ", " ", " "},
-		{" ", "=", "=", "=", "=", "=", "="},
-		{"=", "=", "=", "=", "=", "=", "|"},
-		{"|", " ", "|", " ", "|", " ", "|"},
-		{"|", " ", "|", " ", "|", " ", "|"},
-		{"|", " ", "|", " ", "|", " ", "|"},
-		{"|", " ", " ", " ", "|", " ", " "},
-	},
-	Align: BottomAlign,
-}
-
-var chairSprite = Sprite{
-	X: 1.4, Y: 2.1, Scale: 1, Texture: [][]string{
-		{" ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", " "},
-		{" ", " ", " ", "B", " "},
-		{" ", " ", " ", "B", " "},
-		{" ", " ", " ", "B", " "},
-		{"B", "B", "B", "B", " "},
-		{"B", " ", " ", "B", " "},
-		{"B", " ", " ", "B", " "},
-	},
-	Align: BottomAlign,
-}
-
-var paintingSprite = Sprite{
-	X: 2.55, Y: 1.41, Scale: 1, Texture: [][]string{
-		{"=", "=", "=", "=", "=", "=", "=", "=", "=", "=", "="},
-		{"=", "▒", "▒", "░", "░", "░", "L", "L", "L", "░", "="},
-		{"=", "▒", "▒", "░", "░", "░", "B", "▓", "░", "░", "="},
-		{"=", "▒", "░", "░", "░", "░", "░", "▓", "░", "▓", "="},
-		{"=", "▒", "░", "░", "░", "░", "▓", "▓", "▓", "░", "="},
-		{"=", "░", "░", "░", "░", "▓", "░", "▓", "░", "░", "="},
-		{"=", "░", "░", "░", "░", "░", "░", "▓", "░", "░", "="},
-		{"=", "░", "░", "░", "░", "░", "▓", "░", "▓", "░", "="},
-		{"=", "░", "░", "░", "░", "░", "▓", "░", "▓", "░", "="},
-		{"=", "░", "░", "░", "░", "░", "R", "░", "R", "░", "="},
-		{"=", "=", "=", "=", "=", "=", "=", "=", "=", "=", "="},
-	},
-	Align: CenterAlign,
-}
-
-var human = Sprite{
-	X: 3.2, Y: 5, Scale: 2, Texture: [][]string{
-		{"O", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "O"},
-		{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", "G", "G", "G", "G", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", "G", "R", "G", "G", "R", "G", " ", " ", " ", " ", " "},
-		{" ", " ", " ", "G", "G", "G", "G", "G", "G", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", "G", "G", "G", "G", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", " ", "G", "G", " ", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", "G", "G", "G", "G", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", "G", "G", "G", "G", "G", "G", " ", " ", " ", " ", " "},
-		{" ", " ", " ", "G", " ", "G", "G", " ", "G", " ", " ", " ", " ", " "},
-		{" ", " ", " ", "G", " ", "G", "G", " ", "G", " ", " ", " ", " ", " "},
-		{" ", " ", " ", "G", " ", "G", "G", " ", "G", " ", " ", " ", " ", " "},
-		{" ", " ", " ", "G", " ", "G", "G", " ", "G", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", " ", "G", "G", " ", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", " ", "G", "G", " ", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", " ", "G", "G", " ", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", "G", "G", "G", "G", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", "G", "G", "G", "G", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", "G", " ", "▒", "G", "▒", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", "G", " ", " ", "G", "▒", "▒", " ", " ", " ", " "},
-		{" ", " ", " ", " ", "G", " ", " ", "G", "▒", "▒", "▒", " ", " ", " "},
-		{" ", " ", " ", " ", "G", " ", " ", "G", "▒", "▒", " ", " ", " ", " "},
-		{" ", " ", " ", " ", "G", " ", " ", "G", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", "G", " ", " ", "G", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", "G", " ", " ", "G", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", " ", "G", " ", " ", "G", " ", " ", " ", " ", " ", " "},
-		{" ", " ", " ", "G", "G", " ", " ", "G", "G", " ", " ", " ", " ", " "},
-	},
-	Align: CenterAlign,
-}
+// Sprites information
+var Sprites []*Sprite
 
 // Draws sprites column on screen
 func drawSpritesColumn(screen screen.Screen, col int, angle Degree, distanceToWall float64) {
 	// We should sort all our sprites by distance so closest are rendered last
-	sort.Slice(sprites, func(i, j int) bool {
-		return playerDistToSprite(*sprites[i]) > playerDistToSprite(*sprites[j])
+	sort.Slice(Sprites, func(i, j int) bool {
+		return playerDistToSprite(*Sprites[i]) > playerDistToSprite(*Sprites[j])
 	})
 
-	for _, sprite := range sprites {
+	for _, sprite := range Sprites {
 		drawSpriteColumn(screen, *sprite, col, angle, distanceToWall)
 	}
 }
@@ -182,7 +54,7 @@ func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, angle Degree
 		scaledTexture := scaleStringTextureVertically(sprite.Texture, spriteHeight+1)
 		for i := 0; i <= spriteHeight; i++ {
 			if spriteScreenRow >= 0 {
-				if scaledTexture[i][spriteCol] != " " {
+				if scaledTexture[i][spriteCol] != 0 {
 					_ = screen.SetPixel(col, spriteScreenRow, scaledTexture[i][spriteCol])
 				}
 			}
@@ -212,11 +84,11 @@ func seesSprite(angle Degree, sprite Sprite) (hit bool, spritePoint float64) {
 	angleDiff := angle.Plus(-playerAngleToSprite(sprite).Get())
 	angleOffset := 18 / playerDistToSprite(sprite) * sprite.Scale
 
-	if angleDiff >0 && angleDiff<angleOffset{
+	if angleDiff > 0 && angleDiff < angleOffset {
 		return true, (angleDiff + angleOffset) / (angleOffset * 2)
 	}
 	if angleDiff > 360-angleOffset {
-		angleDiff = angleDiff-360
+		angleDiff = angleDiff - 360
 		return true, (angleDiff + angleOffset) / (angleOffset * 2)
 	}
 	return false, 0
@@ -249,9 +121,11 @@ func distToSprite(x, y float64, sprite Sprite) float64 {
 
 // Calculates if the given point intersects with any sprite
 func intersectsWithSprite(x, y float64) (intersects bool) {
-	for _, sprite := range sprites {
-		if distToSprite(x, y, *sprite) < sprite.Scale/2 {
-			return true
+	for _, sprite := range Sprites {
+		if sprite.Solid {
+			if distToSprite(x, y, *sprite) < sprite.Scale/2 {
+				return true
+			}
 		}
 	}
 	return false

@@ -3,33 +3,20 @@ package screen
 // Screen represents screen buffer
 type Screen interface {
 	NewScreen(w, h int) Screen
-	// todo: unify to abstract pixel value (hex uint32 maybe?) [Strings for now because they are easier to manage at this stage]
-	SetPixel(x, y int, pixel string) error
+	SetPixel(x, y int, pixel uint32) error
 	Render()
 	Clear()
 	Height() int
 	Width() int
 }
 
-// Temporary symbol lookup table
-// todo: delete after settling on pixel values
-var screenColorsLookup = map[string]uint32{
-	"░":      0x525A6A,
-	"▒":      0x656F84,
-	"▓":      0x7D89A3,
-	"|":      0x967639,
-	"=":      0x785e2d,
-	" ":      0x000000,
-	"B":      0x216583,
-	"R":      0xF76262,
-	"L":      0x65C0BA,
-	"G":      0x458925,
-	"Y":      0xE5DA2A,
-	"O":      0xE5872A,
-	"W":      0xF0F0F0,
-	"Sky":    0xBAE9FF,
-	"Ground": 0x065535,
-}
+const (
+	CL_NONE   = 0
+	CL_GROUND = 0x484445
+	CL_SKY    = 0x6C696A
+	CL_BLACK  = 0x2c3531
+	CL_WHITE  = 0xF0F0F0
+)
 
 // Dummy screen with no functionality for debug purposes
 type DummyScreen struct {
@@ -57,7 +44,7 @@ func (scr DummyScreen) Width() int {
 }
 
 // SetPixel: puts a pixel on screen
-func (scr *DummyScreen) SetPixel(x, y int, symbol string) error {
+func (scr *DummyScreen) SetPixel(x, y int, symbol uint32) error {
 	return nil
 }
 

@@ -17,8 +17,7 @@ func (scr Sdl2) NewScreen(w, h int) Screen {
 	if err := sdl.Init(sdl.INIT_VIDEO); err != nil {
 		scr.check(err)
 	}
-	window, err := sdl.CreateWindow("Sdl2", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
-		int32(w*pixelScale), int32(h*pixelScale), sdl.WINDOW_RESIZABLE)
+	window, err := sdl.CreateWindow("Sdl2", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, int32(w), int32(h), sdl.WINDOW_RESIZABLE)
 	scr.check(err)
 	if _, err = window.GetSurface(); err != nil {
 		scr.check(err)
@@ -30,15 +29,15 @@ func (scr Sdl2) NewScreen(w, h int) Screen {
 }
 
 // SetPixel: puts a pixel on screen
-func (scr *Sdl2) SetPixel(x, y int, symbol string) error {
-	if _, ok := screenColorsLookup[symbol]; !ok {
-		symbol = " "
-	}
-
-	rect := sdl.Rect{X: int32(x * scr.pixelScale), Y: int32(y * scr.pixelScale), W: int32(scr.pixelScale), H: int32(scr.pixelScale)}
+func (scr *Sdl2) SetPixel(x, y int, color uint32) error {
 	surface, err := scr.window.GetSurface()
 	scr.check(err)
-	err = surface.FillRect(&rect, screenColorsLookup[symbol])
+	err = surface.FillRect(&sdl.Rect{
+		X: int32(x * scr.pixelScale),
+		Y: int32(y * scr.pixelScale),
+		W: int32(scr.pixelScale),
+		H: int32(scr.pixelScale),
+	}, color)
 	scr.check(err)
 	return nil
 }
@@ -58,9 +57,9 @@ func (scr *Sdl2) Clear() {
 
 	surface, err := scr.window.GetSurface()
 	scr.check(err)
-	err = surface.FillRect(&sdl.Rect{W: int32(scr.Width() * scr.pixelScale), H: int32(scr.Height() * scr.pixelScale)}, screenColorsLookup["Sky"])
+	err = surface.FillRect(&sdl.Rect{W: int32(scr.Width() * scr.pixelScale), H: int32(scr.Height() * scr.pixelScale)}, CL_SKY)
 	scr.check(err)
-	err = surface.FillRect(&sdl.Rect{Y: int32(scr.Height()*scr.pixelScale) / 2, W: int32(scr.Width() * scr.pixelScale), H: int32(scr.Height() * scr.pixelScale)}, screenColorsLookup["Ground"])
+	err = surface.FillRect(&sdl.Rect{Y: int32(scr.Height()*scr.pixelScale) / 2, W: int32(scr.Width() * scr.pixelScale), H: int32(scr.Height() * scr.pixelScale)}, CL_GROUND)
 	scr.check(err)
 
 	return
