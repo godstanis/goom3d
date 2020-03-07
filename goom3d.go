@@ -10,8 +10,7 @@ import (
 var rotateSpeed, walkSpeed = 4.0, 0.07
 
 func main() {
-	engine.Map = engine.WorldMap
-	engine.SetPlayerPosition(2.3, 2.6, engine.Degree{}.NewDegree(180.0))
+	(&engine.Loader{}).LoadScene("obj/scenes/01.scn")
 
 	output := getScreen()
 	go handleKeys() // Run our input controls in a separate goroutine
@@ -25,7 +24,7 @@ func getScreen() screen.Screen {
 	runSdl2 := flag.Bool("sdl2", false, "a string")
 	flag.Parse()
 	if *runSdl2 {
-		return screen.Sdl2{}.NewScreen(300, 180)
+		return screen.Sdl2{}.NewScreen(800, 400)
 	}
 	return screen.Console{}.NewScreen(0, 0) // Console is auto-sized
 }
@@ -73,13 +72,5 @@ func keyCodeToInput(code uint16) {
 	if code == 100 {
 		//strafe right
 		engine.StrafePlayerH(walkSpeed)
-	}
-
-	// 'Shift' plus '+'/'-' - change FOV
-	if code == 43 {
-		engine.ShiftFov(5.0)
-	}
-	if code == 45 {
-		engine.ShiftFov(-5.0)
 	}
 }

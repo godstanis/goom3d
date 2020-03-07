@@ -3,7 +3,6 @@ package screen
 // Screen represents screen buffer
 type Screen interface {
 	NewScreen(w, h int) Screen
-	// todo: unify to abstract pixel value (hex uint32 maybe?) [Strings for now because they are easier to manage at this stage]
 	SetPixel(x, y int, pixel uint32) error
 	Render()
 	Clear()
@@ -12,11 +11,11 @@ type Screen interface {
 }
 
 const (
-	CL_NONE = 0
-	CL_GROUND = 0x065535
-	CL_SKY = 0xBAE9FF
-	CL_BLACK = 0x2c3531
-	CL_WHITE = 0xF0F0F0
+	CL_NONE   = 0
+	CL_GROUND = 0x484445
+	CL_SKY    = 0x6C696A
+	CL_BLACK  = 0x2c3531
+	CL_WHITE  = 0xF0F0F0
 )
 
 // Dummy screen with no functionality for debug purposes

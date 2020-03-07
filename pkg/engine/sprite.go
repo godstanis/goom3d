@@ -6,6 +6,7 @@ import (
 	"sort"
 )
 
+// Sprite alignment
 const (
 	CenterAlign = iota
 	TopAlign
@@ -18,149 +19,20 @@ type Sprite struct {
 	Align   int
 	Scale   float64
 	Texture [][]uint32
+	Solid   bool
 }
 
-// sprites information for map
-var sprites = []*Sprite{
-	&lampSprite,
-	&boxSprite,
-	&box2Sprite,
-	&paintingSprite,
-	&tableSprite,
-	&chairSprite,
-	&human,
-}
-
-var lampSprite = Sprite{
-	X: 1.4, Y: 2.5, Scale: 1, Texture: [][]uint32{
-		{0, 0, 0, 0x967639, 0x967639, 0, 0, 0},
-		{0, 0, 0, 0x967639, 0x967639, 0, 0, 0},
-		{0xE5872A, 0, 0, 0xE5DA2A, 0xE5DA2A, 0, 0, 0xE5872A},
-		{0xE5DA2A, 0xE5DA2A, 0, 0xE5DA2A, 0xE5DA2A, 0, 0xE5DA2A, 0xE5DA2A},
-		{0, 0, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0, 0},
-		{0, 0, 0, 0xE5DA2A, 0xE5DA2A, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-	},
-	Align: TopAlign,
-}
-
-var boxSprite = Sprite{
-	X: 1.2, Y: 1.2, Scale: 1, Texture: [][]uint32{
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0, 0},
-		{0, 0x967639, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0x967639, 0},
-		{0x967639, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0x967639},
-		{0x967639, 0xE5DA2A, 0xE5DA2A, 0x458925, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0x967639},
-		{0, 0x967639, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0x967639, 0},
-		{0, 0, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-	},
-	Align: BottomAlign,
-}
-
-var box2Sprite = Sprite{
-	X: 1.5, Y: 1.7, Scale: 1, Texture: [][]uint32{
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0, 0},
-		{0, 0x967639, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0x967639, 0},
-		{0x967639, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0x458925, 0xE5DA2A, 0x967639},
-		{0x967639, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0x967639},
-		{0, 0x967639, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0xE5DA2A, 0x967639, 0},
-		{0, 0, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-	},
-	Align: BottomAlign,
-}
-
-var tableSprite = Sprite{
-	X: 1.4, Y: 2.5, Scale: 1, Texture: [][]uint32{
-		{0, 0, 0, 0, 0, 0, 0},
-		{0, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d},
-		{0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x967639},
-		{0x967639, 0, 0x967639, 0, 0x967639, 0, 0x967639},
-		{0x967639, 0, 0x967639, 0, 0x967639, 0, 0x967639},
-		{0x967639, 0, 0x967639, 0, 0x967639, 0, 0x967639},
-		{0x967639, 0, 0, 0, 0x967639, 0, 0},
-	},
-	Align: BottomAlign,
-}
-
-var chairSprite = Sprite{
-	X: 1.4, Y: 2.1, Scale: 1, Texture: [][]uint32{
-		{0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0},
-		{0, 0, 0, 0x216583, 0},
-		{0, 0, 0, 0x216583, 0},
-		{0, 0, 0, 0x216583, 0},
-		{0x216583, 0x216583, 0x216583, 0x216583, 0},
-		{0x216583, 0, 0, 0x216583, 0},
-		{0x216583, 0, 0, 0x216583, 0},
-	},
-	Align: BottomAlign,
-}
-
-var paintingSprite = Sprite{
-	X: 2.55, Y: 1.41, Scale: 1, Texture: [][]uint32{
-		{0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d},
-		{0x785e2d, 0x656F84, 0x656F84, 0x525A6A, 0x525A6A, 0x525A6A, 0x65C0BA, 0x65C0BA, 0x65C0BA, 0x525A6A, 0x785e2d},
-		{0x785e2d, 0x656F84, 0x656F84, 0x525A6A, 0x525A6A, 0x525A6A, 0x216583, 0x7D89A3, 0x525A6A, 0x525A6A, 0x785e2d},
-		{0x785e2d, 0x656F84, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0x7D89A3, 0x525A6A, 0x7D89A3, 0x785e2d},
-		{0x785e2d, 0x656F84, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0x7D89A3, 0x7D89A3, 0x7D89A3, 0x525A6A, 0x785e2d},
-		{0x785e2d, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0x7D89A3, 0x525A6A, 0x7D89A3, 0x525A6A, 0x525A6A, 0x785e2d},
-		{0x785e2d, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0x7D89A3, 0x525A6A, 0x525A6A, 0x785e2d},
-		{0x785e2d, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0x7D89A3, 0x525A6A, 0x7D89A3, 0x525A6A, 0x785e2d},
-		{0x785e2d, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0x7D89A3, 0x525A6A, 0x7D89A3, 0x525A6A, 0x785e2d},
-		{0x785e2d, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0x525A6A, 0xF76262, 0x525A6A, 0xF76262, 0x525A6A, 0x785e2d},
-		{0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d, 0x785e2d},
-	},
-	Align: CenterAlign,
-}
-
-var human = Sprite{
-	X: 3.2, Y: 5, Scale: 2, Texture: [][]uint32{
-		{0xE5872A, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xE5872A},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0x458925, 0x458925, 0x458925, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0x458925, 0xF76262, 0x458925, 0x458925, 0xF76262, 0x458925, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0x458925, 0x458925, 0x458925, 0x458925, 0x458925, 0x458925, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0x458925, 0x458925, 0x458925, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0x458925, 0x458925, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0x458925, 0x458925, 0x458925, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0x458925, 0x458925, 0x458925, 0x458925, 0x458925, 0x458925, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0x458925, 0, 0x458925, 0x458925, 0, 0x458925, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0x458925, 0, 0x458925, 0x458925, 0, 0x458925, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0x458925, 0, 0x458925, 0x458925, 0, 0x458925, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0x458925, 0, 0x458925, 0x458925, 0, 0x458925, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0x458925, 0x458925, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0x458925, 0x458925, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0x458925, 0x458925, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0x458925, 0x458925, 0x458925, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0x458925, 0x458925, 0x458925, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0, 0x656F84, 0x458925, 0x656F84, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0, 0, 0x458925, 0x656F84, 0x656F84, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0, 0, 0x458925, 0x656F84, 0x656F84, 0x656F84, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0, 0, 0x458925, 0x656F84, 0x656F84, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0, 0, 0x458925, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0, 0, 0x458925, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0, 0, 0x458925, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0x458925, 0, 0, 0x458925, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0x458925, 0x458925, 0, 0, 0x458925, 0x458925, 0, 0, 0, 0, 0},
-	},
-	Align: CenterAlign,
-}
+// Sprites information
+var Sprites []*Sprite
 
 // Draws sprites column on screen
 func drawSpritesColumn(screen screen.Screen, col int, angle Degree, distanceToWall float64) {
 	// We should sort all our sprites by distance so closest are rendered last
-	sort.Slice(sprites, func(i, j int) bool {
-		return playerDistToSprite(*sprites[i]) > playerDistToSprite(*sprites[j])
+	sort.Slice(Sprites, func(i, j int) bool {
+		return playerDistToSprite(*Sprites[i]) > playerDistToSprite(*Sprites[j])
 	})
 
-	for _, sprite := range sprites {
+	for _, sprite := range Sprites {
 		drawSpriteColumn(screen, *sprite, col, angle, distanceToWall)
 	}
 }
@@ -249,9 +121,11 @@ func distToSprite(x, y float64, sprite Sprite) float64 {
 
 // Calculates if the given point intersects with any sprite
 func intersectsWithSprite(x, y float64) (intersects bool) {
-	for _, sprite := range sprites {
-		if distToSprite(x, y, *sprite) < sprite.Scale/2 {
-			return true
+	for _, sprite := range Sprites {
+		if sprite.Solid {
+			if distToSprite(x, y, *sprite) < sprite.Scale/2 {
+				return true
+			}
 		}
 	}
 	return false

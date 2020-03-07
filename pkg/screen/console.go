@@ -31,9 +31,8 @@ func (scr Console) NewScreen(w, h int) Screen {
 }
 
 // SetPixel: puts a pixel on screen
-func (scr *Console) SetPixel(x, y int, symbol uint32) error {
-
-	scr.Screen.SetContent(x, y, ' ', nil, tcell.StyleDefault.Background(tcell.NewHexColor(int32(symbol))))
+func (scr *Console) SetPixel(x, y int, color uint32) error {
+	scr.Screen.SetContent(x, y, ' ', nil, tcell.StyleDefault.Background(tcell.NewHexColor(int32(color))))
 	return nil
 }
 
