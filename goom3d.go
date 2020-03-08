@@ -24,7 +24,7 @@ func getScreen() screen.Screen {
 	runSdl2 := flag.Bool("sdl2", false, "a string")
 	flag.Parse()
 	if *runSdl2 {
-		return screen.Sdl2{}.NewScreen(800, 400)
+		return screen.Sdl2{}.NewScreen(1000, 600)
 	}
 	return screen.Console{}.NewScreen(0, 0) // Console is auto-sized
 }

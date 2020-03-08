@@ -51,7 +51,7 @@ func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, angle Degree
 		}
 		spriteScreenRow := calculateSpriteStart(screen, sprite, spriteHeight)
 		spriteCol := int(math.Round(sP * float64(len(sprite.Texture[0])-1)))
-		scaledTexture := scaleStringTextureVertically(sprite.Texture, spriteHeight+1)
+		scaledTexture := scaleTextureVertically(sprite.Texture, spriteHeight+1)
 		for i := 0; i <= spriteHeight; i++ {
 			if spriteScreenRow >= 0 {
 				if scaledTexture[i][spriteCol] != 0 {

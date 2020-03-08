@@ -47,22 +47,13 @@ func drawWorld(screen screen.Screen) {
 
 // Draws textured wall column on screen
 func drawTexturedWallColumn(screen screen.Screen, tile int, i int, height int, tileP float64) {
-	var offset, textureOffset int
-	if height > screen.Height() {
-		textureOffset = (height - screen.Height()) / 2
-	} else {
-		offset = (screen.Height() - height) / 2
-	}
+	scaledTexture := scaleAndClipTextureVertically(TileTextures[tile], height, screen.Height())
 
 	col := int(math.Round(float64(len(TileTextures[tile][0])-1) * tileP))
-	scaledTexture := scaleStringTextureVertically(TileTextures[tile], height)
-
-	end := screen.Height() - offset - 1
-	for j := offset; j <= end; j++ {
-		if textureOffset < height {
-			_ = screen.SetPixel(i, j, scaledTexture[textureOffset][col])
+	for idx, row := range scaledTexture {
+		if row != nil {
+			_ = screen.SetPixel(i, idx, row[col])
 		}
-		textureOffset++
 	}
 }
 
