@@ -14,7 +14,7 @@ func (dgr Degree) NewDegree(angle float64) Degree {
 
 // Sets and normalizes angle
 func (dgr *Degree) Set(angle float64) {
-	if angle >=360 {
+	if angle >= 360 {
 		angle = angle - 360
 	}
 	if angle < 0 {
@@ -25,12 +25,12 @@ func (dgr *Degree) Set(angle float64) {
 
 // Adds angle
 func (dgr *Degree) Add(angle float64) {
-	dgr.Set(dgr.Get()+angle)
+	dgr.Set(dgr.Get() + angle)
 }
 
 // Returns adjusted angle value, no sets performed
 func (dgr Degree) Plus(angle float64) float64 {
-	dgr.Set(dgr.Get()+angle)
+	dgr.Set(dgr.Get() + angle)
 	return dgr.Get()
 }
 

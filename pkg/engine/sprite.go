@@ -33,33 +33,36 @@ func drawSpritesColumn(screen screen.Screen, col int, angle Degree, distanceToWa
 	})
 
 	for _, sprite := range Sprites {
-		drawSpriteColumn(screen, *sprite, col, angle, distanceToWall)
+		// Draw sprite column if it is not behind any walls
+		if playerDistToSprite(*sprite) < distanceToWall {
+			drawSpriteColumn(screen, *sprite, col, angle)
+		}
 	}
 }
 
 // Draws one column for specific sprite on screen
-func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, angle Degree, distanceToWall float64) {
-	if playerDistToSprite(sprite) < distanceToWall {
-		sees, sP := seesSprite(angle, sprite)
-		if !sees {
-			return
+func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, angle Degree) {
+	sees, sP := seesSprite(angle, sprite)
+	if !sees {
+		return
+	}
+
+	spriteHeight := int(float64(distToHeight(playerDistToSprite(sprite), screen.Height())) * sprite.Scale / 2)
+	if spriteHeight == 0 {
+		return
+	}
+
+	spriteScreenRow := calculateSpriteStart(screen, sprite, spriteHeight)
+	spriteCol := int(math.Round(sP * float64(len(sprite.Texture[0])-1)))
+	scaledTexture := scaleTextureVertically(sprite.Texture, spriteHeight+1)
+
+	for i := 0; i <= spriteHeight; i++ {
+		spriteScreenRow++
+		if spriteScreenRow < 0 || scaledTexture[i][spriteCol] == 0 {
+			continue
 		}
 
-		spriteHeight := int(float64(distToHeight(playerDistToSprite(sprite), screen.Height())) * sprite.Scale / 2)
-		if spriteHeight == 0 {
-			spriteHeight = 1 // If scale is set to something really low we could end up with 0 height
-		}
-		spriteScreenRow := calculateSpriteStart(screen, sprite, spriteHeight)
-		spriteCol := int(math.Round(sP * float64(len(sprite.Texture[0])-1)))
-		scaledTexture := scaleTextureVertically(sprite.Texture, spriteHeight+1)
-		for i := 0; i <= spriteHeight; i++ {
-			if spriteScreenRow >= 0 {
-				if scaledTexture[i][spriteCol] != 0 {
-					_ = screen.SetPixel(col, spriteScreenRow, scaledTexture[i][spriteCol])
-				}
-			}
-			spriteScreenRow++
-		}
+		_ = screen.SetPixel(col, spriteScreenRow, scaledTexture[i][spriteCol])
 	}
 }
 
