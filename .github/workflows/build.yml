@@ -1,4 +1,4 @@
-name: Go
+name: Go-Build
 on: [push]
 jobs:
 
@@ -22,13 +22,13 @@ jobs:
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
-        fi; sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev; sudo apt install libsdl2{,-image,-mixer,-ttf,-gfx}-dev
+        fi; sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev libsdl2{,-image,-mixer,-ttf,-gfx}-dev
 
     - name: Build
       run: go build -v .
     
     - name: Prepare build artifacts
-      run: mkdir ./artifacts; mv ./goom3d ./artifacts
+      run: mkdir ./artifacts; mv ./goom3d ./artifacts; cp -r ./assets ./artifacts/assets; cp -r ./obj ./artifacts/obj
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v1.0.0
