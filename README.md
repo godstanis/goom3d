@@ -6,7 +6,7 @@
 
 Engine is written using raycasting techniques. It's not real 3D but an illusion, constructed by some tricky math and visualization techniques. I won't go into details, the code itself is pretty easy to follow and is well documented. But if you want to know more you would want to find a better and more detailed articles online.
 
-| Console <br> `256x76; 24bit color mode`  | Sdl2 screen adapter <br> `500x300` |
+| Terminal (Console) <br> `256x76; 24bit color mode`  | Sdl2 screen adapter <br> `500x300; Full RGB color range` |
 | ------------- | ------------- |
 | <img src=".github/media/showcase_console.gif">  | <img src=".github/media/showcase_sdl2.gif">  |
 
