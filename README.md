@@ -26,16 +26,28 @@ TODO:
       - [ ] Simple horde ai
       - [ ] Simple Idle/Attack ai implementation
 
-## Requirements
-### Running
+### Installation / Requirements
+#### Running
 You can pick any recent build from "Build" job artifacts of  [project's Github actions page](https://github.com/godstanis/goom3d/actions). You dont need any additional dependencies to run the executables.
 
-### Building
+You can use one of these two commands to run the game:
+```bash
+# Console output
+./goom3d
+```
+```shell
+# Sdl2 window output
+./goom3d -sdl2
+```
+
+#### Building
 If you want to build this project, you will need some dev dependencies. This project depends on some **Sdl2** and **CGO** functions to run, i won't go into detailed setup process, so for Ubuntu/Debian you could just run this command:
 
 ```shell
 sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev libsdl2{,-image,-mixer,-ttf,-gfx}-dev
 ```
+
+After that you can build the project as a normal golang application. Have fun!)
 
 > If you need more, consider reading [go-sdl2 readme](https://github.com/veandco/go-sdl2/blob/master/README.md)
 
