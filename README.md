@@ -11,13 +11,16 @@ Engine is written using raycasting techniques. It's not real 3D but an illusion,
 TODO:
   - Engine:
     - [x] Add colors support (screen mod 8/16/256 colors)
-    - [x] Add texture importing from image files (png)
+    - [x] Add texture importing from image files (png/jpg/bmp)
     - [ ] Refactor input controls (for cross-compatibility with win/mac/linux)
     - [x] Refactor console logic (for cross-compatibility with win/mac/linux)
     - [x] Transfer game objects to specific files
-    - [x] Add opengl screen
+    - [x] Add opengl/sdl2 screen
+    - [ ] Fix windows compilation issues
+    - [ ] Extend walls collision detection boundaries
   - Gameplay:
     - [ ] Weapon(s) and hitboxes
+    - [ ] Simple animation cycling engine
     - [ ] AI:
       - [ ] Enemies (hitboxes, collision boxes e.t.c.)
       - [ ] Simple horde ai
@@ -54,9 +57,11 @@ The main problem is not to project scaled-down images, but to make **scaled up**
 
 ### Sprites
 
+<img src=".github/media/sprite_move_01.gif" width=40% align=left>
+
 Sprites are quite tricky to implement in such an engine. The part of the problem is they are not so 2D as you may think. Techniques of implementing them in 2D and 3D are quite similar, but... we don't have that Z-axis.
 
-The only available data is our player position, his view angle and sprite position plus it's size, and so, to actually project it on our screen we have to calculate the distance to the sprite, and we should determine the relation of current rendering screen row to angles of two sides of the sprite (yeah, the center position is not enough). I don't actually calculate those angles and I use some magic to project them, you can learn more by looking at `sprite.go` code c:
+The only available data is our player position, his view angle and sprite position plus it's size, and so, to actually project it on our screen we have to calculate the distance to the sprite, and we should determine the relation of current rendering screen row to angles of two sides of the sprite (yeah, the center position is not enough). I don't actually calculate those angles and I use some magic to project them, you can learn more by looking at `sprite.go` code :)
 
 ## Graphics
 
@@ -67,3 +72,5 @@ The project is written with terminal graphics in mind, but it's not coupled to i
 - [Sdl2](https://github.com/veandco/go-sdl2) (OpenGL-like media binding)
 
 By default, the project uses console buffer, but you can run it with Sdl2 screen using `-sdl2` execution flag.
+
+> PRs and Issues are welcome!
