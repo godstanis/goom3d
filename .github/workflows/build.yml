@@ -1,4 +1,4 @@
-name: Go
+name: Go-Build
 on: [push]
 jobs:
 
@@ -28,7 +28,7 @@ jobs:
       run: go build -v .
     
     - name: Prepare build artifacts
-      run: mkdir ./artifacts; mv ./goom3d ./artifacts
+      run: mkdir ./artifacts; mv ./goom3d ./artifacts; cp -r ./assets ./artifacts/assets; cp -r ./obj ./artifacts/obj
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v1.0.0
