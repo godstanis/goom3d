@@ -28,7 +28,7 @@ TODO:
 
 ### Installation / Requirements
 #### Running
-You can pick any recent build from "Build" job artifacts of  [project's Github actions page](https://github.com/godstanis/goom3d/actions). You dont need any additional dependencies to run the executables.
+You can pick any recent build from "Go-Build" job artifacts of  [project's GitHub actions page](https://github.com/godstanis/goom3d/actions?query=workflow%3AGo-Build). You dont need any additional dependencies to run the executables.
 
 You can use one of these two commands to run the game:
 ```bash
