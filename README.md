@@ -2,7 +2,7 @@
 
 :suspect: 3D first-person shooter written in go and hugely inspired by Wolfenstein 3D
 
-# Engine
+## Engine
 
 Engine is written using raycasting techniques. It's not real 3D but an illusion, constructed by some tricky math and visualization techniques. I won't go into details, the code itself is pretty easy to follow and is well documented. But if you want to know more you would want to find a better and more detailed articles online.
 
@@ -25,6 +25,19 @@ TODO:
       - [ ] Simple horde ai
       - [ ] Simple Idle/Attack ai implementation
 
+## Requirements
+### Running
+You can pick any recent build from "Build" job artifacts of  [project's Github actions page](https://github.com/godstanis/goom3d/actions). You dont need any additional dependencies to run the executables.
+
+### Building
+If you want to build this project, you will need some dev dependencies. This project depends on some **Sdl2** and **CGO** functions to run, i wont go into detailed setup process and for ubuntu you can just run this command:
+
+```
+TODO: Paste dep install command here
+```
+
+> For more information please consider reading [go-sdl2 readme](https://github.com/veandco/go-sdl2/blob/master/README.md)
+
 ### Raycasting
 
 Raycasting is a rendering technique to create a 3D perspective on a 2D map. Back when computers were slower it wasn't possible to run real 3D engines in realtime, and raycasting was the first solution. Raycasting can go very fast because only a calculation has to be done for every vertical line of the screen. The most well-known game that used this technique, is, of course, **Wolfenstein 3D**.
@@ -43,7 +56,7 @@ Sprites are quite tricky to implement in such an engine. The part of the problem
 
 The only available data is our player position, his view angle and sprite position plus it's size, and so, to actually project it on our screen we have to calculate the distance to the sprite, and we should determine the relation of current rendering screen row to angles of two sides of the sprite (yeah, the center position is not enough). I don't actually calculate those angles and I use some magic to project them, you can learn more by looking at `sprite.go` code c:
 
-# Graphics
+## Graphics
 
 The project is written with terminal graphics in mind, but it's not coupled to it. Actually, there are 2 graphics engines right now:
 
@@ -52,5 +65,3 @@ The project is written with terminal graphics in mind, but it's not coupled to i
 - [Sdl2](https://github.com/veandco/go-sdl2) (OpenGL-like media binding)
 
 By default, the project uses console buffer, but you can run it with Sdl2 screen using `-sdl2` execution flag.
-
-<hr>
