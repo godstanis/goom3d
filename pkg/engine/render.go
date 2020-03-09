@@ -11,6 +11,10 @@ import (
 // Map structure
 var Map [][]int
 
+// Elapsed time in seconds since previous frame. Could be used to stabilize time-dependent operations like moving or animations
+var TimeElapsed float64
+
+// Internal variable to output any debug related information to console row.
 var renderDebugInfo string
 
 // Renders a frame
@@ -18,7 +22,8 @@ func RenderView(screen screen.Screen) {
 	start := time.Now()
 	drawWorld(screen)
 	drawUI(screen)
-	renderToScreen(screen, fmt.Sprintf("FPS: %6.2f; POV:%4.2f; FOV:%4.2f, player_pos:(X:%9.4f,Y:%9.4f)", 1/time.Since(start).Seconds(), curAngle, curFov, curX, curY))
+	renderToScreen(screen, fmt.Sprintf("FPS: %6.2f; POV:%4.2f; FOV:%4.2f, player_pos:(X:%9.4f,Y:%9.4f)", 1/TimeElapsed, curAngle, curFov, curX, curY))
+	TimeElapsed = time.Since(start).Seconds()
 }
 
 // renderToScreen: actually transfer screen buffer to screen output
