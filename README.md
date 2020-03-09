@@ -2,7 +2,7 @@
 
 :suspect: 3D first-person shooter written in go and hugely inspired by Wolfenstein 3D
 
-Engine is written using raycasting techniques. It's not real 3D but an illusion, constructed by some tricky math and visualization techniques. I won't go into details, the code itself is pretty easy to follow and is well documented. But if you want to know more you would want to find a better and more detailed articles online.
+This engine is a **software renderer**. Engine is written using raycasting techniques. It's not real 3D but an illusion, constructed by some tricky math and visualization techniques. I won't go into details, the code itself is pretty easy to follow and is well documented. But if you want to know more you would want to find a better and more detailed articles online.
 
 | Terminal (Console) <br> `256x76; 24bit color mode`  | Sdl2 screen adapter <br> `500x300; Full RGB color range` |
 | ------------- | ------------- |
@@ -41,7 +41,7 @@ You can use one of these two commands to run the game:
 ```
 
 #### Building
-If you want to build this project, you will need some dev dependencies. This project depends on some **Sdl2** and **CGO** functions to run, i won't go into detailed setup process, so for Ubuntu/Debian you could just run this command:
+If you want to build/compile this project, you will need to install dev dependencies first. This project depends on some **Sdl2** and **CGO** functions to run, i won't go into detailed setup process, so for Ubuntu/Debian you could just run this command:
 
 ```shell
 sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev libsdl2{,-image,-mixer,-ttf,-gfx}-dev
