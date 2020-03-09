@@ -30,13 +30,13 @@ TODO:
 You can pick any recent build from "Build" job artifacts of  [project's Github actions page](https://github.com/godstanis/goom3d/actions). You dont need any additional dependencies to run the executables.
 
 ### Building
-If you want to build this project, you will need some dev dependencies. This project depends on some **Sdl2** and **CGO** functions to run, i wont go into detailed setup process and for ubuntu you can just run this command:
+If you want to build this project, you will need some dev dependencies. This project depends on some **Sdl2** and **CGO** functions to run, i won't go into detailed setup process, so for Ubuntu/Debian you could just run this command:
 
-```
-TODO: Paste dep install command here
+```shell
+sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev libsdl2{,-image,-mixer,-ttf,-gfx}-dev
 ```
 
-> For more information please consider reading [go-sdl2 readme](https://github.com/veandco/go-sdl2/blob/master/README.md)
+> If you need more, consider reading [go-sdl2 readme](https://github.com/veandco/go-sdl2/blob/master/README.md)
 
 ### Raycasting
 
