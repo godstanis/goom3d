@@ -2,8 +2,6 @@
 
 :suspect: 3D first-person shooter written in go and hugely inspired by Wolfenstein 3D
 
-## Engine
-
 Engine is written using raycasting techniques. It's not real 3D but an illusion, constructed by some tricky math and visualization techniques. I won't go into details, the code itself is pretty easy to follow and is well documented. But if you want to know more you would want to find a better and more detailed articles online.
 
 | Terminal (Console) <br> `256x76; 24bit color mode`  | Sdl2 screen adapter <br> `500x300; Full RGB color range` |
@@ -38,7 +36,11 @@ sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev libsdl2{,-i
 
 > If you need more, consider reading [go-sdl2 readme](https://github.com/veandco/go-sdl2/blob/master/README.md)
 
+## Engine
+
 ### Raycasting
+
+<img src=".github/media/raycasting_process.gif" align=right width=50%>
 
 Raycasting is a rendering technique to create a 3D perspective on a 2D map. Back when computers were slower it wasn't possible to run real 3D engines in realtime, and raycasting was the first solution. Raycasting can go very fast because only a calculation has to be done for every vertical line of the screen. The most well-known game that used this technique, is, of course, **Wolfenstein 3D**.
 
