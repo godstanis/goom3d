@@ -73,4 +73,6 @@ The project is written with terminal graphics in mind, but it's not coupled to i
 
 By default, the project uses console buffer, but you can run it with Sdl2 screen using `-sdl2` execution flag.
 
+<hr>
+
 > PRs and Issues are welcome!
