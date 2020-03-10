@@ -16,16 +16,27 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-    - name: Get dependencies
+    - name: Get go dependencies
       run: |
         go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
-        fi; sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev libsdl2{,-image,-mixer,-ttf,-gfx}-dev
+        fi
 
-    - name: Build
+    - name: Get building dependencies
+      run: |
+        sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev libsdl2{,-image,-mixer,-ttf,-gfx}-dev;
+        sudo apt-get install mingw-w64 unzip;
+        mkdir /tmp/sdl2-build; wget http://libsdl.org/release/SDL2-2.0.10-win32-x64.zip /tmp/sdl2-build
+        unzip /tmp/sdl2-build/SDL2-2.0.10-win32-x64.zip
+        ls /tmp/sdl2-build
+
+    - name: Build-Linux
       run: go build -v .
+
+    - name: Build-Windows
+      run: env CGO_ENABLED="1" CC="/usr/bin/x86_64-w64-mingw32-gcc" GOOS="windows" CGO_LDFLAGS="-lmingw32 -lSDL2" CGO_CFLAGS="-D_REENTRANT" go build -x goom3d.go
     
     - name: Prepare build artifacts
       run: mkdir ./artifacts; mv ./goom3d ./artifacts; cp -r ./assets ./artifacts/assets; cp -r ./obj ./artifacts/obj
