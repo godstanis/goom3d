@@ -25,26 +25,16 @@ jobs:
         fi
         
     - name: Sdl2 Base dependencies
-      run: |
-        sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev libsdl2{,-image,-mixer,-ttf,-gfx}-dev;
-        sudo apt-get install mingw-w64 unzip;
+      run: sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev mingw-w64 libsdl2{,-image,-mixer,-ttf,-gfx}-dev
       
     - name: Sdl2 Windows dependencies
       run: |
-        sudo mkdir /tmp/sdl2-build;
-        sudo mkdir /tmp/sdl2-build/mingw;
-        sudo mkdir /tmp/sdl2-build/dll;
+        sudo mkdir /tmp/sdl2-build /tmp/sdl2-build/mingw /tmp/sdl2-build/dll;
         sudo wget -P /tmp/sdl2-build http://libsdl.org/release/SDL2-devel-2.0.10-mingw.tar.gz;
+        sudo wget -P /tmp/sdl2-build/dll http://libsdl.org/release/SDL2-2.0.10-win32-x64.zip;
+        sudo unzip /tmp/sdl2-build/dll/SDL2-2.0.10-win32-x64.zip -d /tmp/sdl2-build/dll;
         sudo tar xvzf /tmp/sdl2-build/SDL2-devel-2.0.10-mingw.tar.gz -C /tmp/sdl2-build/mingw;
         sudo cp -r /tmp/sdl2-build/mingw/SDL2-2.0.10/x86_64-w64-mingw32 /usr;
-        sudo wget -P /tmp/sdl2-build/dll http://libsdl.org/release/SDL2-2.0.10-win32-x64.zip;
-        sudo unzip /tmp/sdl2-build/dll/SDL2-2.0.10-win32-x64.zip -d /tmp/sdl2-build/dll
-    - name: Ls /tmp/sdl2-build
-      run: ls /tmp/sdl2-build
-    - name: Ls /tmp/sdl2-build/mingw
-      run: ls /tmp/sdl2-build/mingw
-    - name: Ls /tmp/sdl2-build/dll
-      run: ls /tmp/sdl2-build/dll
 
     - name: Build-Linux
       run: go build -v .
@@ -57,15 +47,15 @@ jobs:
         mkdir ./artifacts-linux;
         mv ./goom3d ./artifacts;
         cp -r ./assets ./artifacts-linux/assets;
-        cp -r ./obj ./artifacts-linux/obj
+        cp -r ./obj ./artifacts-linux/obj;
         
     - name: Prepare Windows build artifacts
       run: |
         mkdir ./artifacts-win;
         mv ./goom3d.exe ./artifacts-win;
-        mv /tmp/sdl2-build/dll/SDL2.dll ./artifacts-win
+        sudo mv /tmp/sdl2-build/dll/SDL2.dll ./artifacts-win;
         cp -r ./assets ./artifacts-win/assets;
-        cp -r ./obj ./artifacts-win/obj
+        cp -r ./obj ./artifacts-win/obj;
 
     - name: Upload linux build artifact
       uses: actions/upload-artifact@v1.0.0
