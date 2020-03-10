@@ -7,7 +7,8 @@ import (
 
 // Console represents symbols screen buffer (where each pixel is symbol)
 type Console struct {
-	Screen tcell.Screen
+	Screen     tcell.Screen
+	keyHandler func(int)
 }
 
 // NewScreen: empty screen initializer with buffer of empty pixels
@@ -67,14 +68,20 @@ func (scr Console) Width() int {
 	return w
 }
 
+// SetKeyboardHandler: sets handler function for input listening
+func (scr *Console) SetKeyboardHandler(call func(int)) {
+	scr.keyHandler = call
+}
+
 // runControlsMonitor: service method for main screen event listeners
-func (scr Console) runControlsMonitor() {
+func (scr *Console) runControlsMonitor() {
 	// Some controls
 	go func() {
 		for {
 			ev := scr.Screen.PollEvent()
 			switch ev := ev.(type) {
 			case *tcell.EventKey:
+				scr.keyHandler(int(ev.Rune()))
 				switch ev.Key() {
 				case tcell.KeyCtrlC, tcell.KeyEscape:
 					scr.Screen.Fini()

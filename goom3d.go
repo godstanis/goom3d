@@ -4,7 +4,6 @@ import (
 	"flag"
 	"github.com/godstanis/goom3d/pkg/engine"
 	"github.com/godstanis/goom3d/pkg/screen"
-	"github.com/robotn/gohook"
 )
 
 var rotateSpeed, walkSpeed = 4.0, 0.07
@@ -13,7 +12,6 @@ func main() {
 	(&engine.Loader{}).LoadScene("obj/scenes/01.scn")
 
 	output := getScreen()
-	go handleKeys() // Run our input controls in a separate goroutine
 	for {
 		engine.RenderView(output)
 	}
@@ -23,26 +21,19 @@ func main() {
 func getScreen() screen.Screen {
 	runSdl2 := flag.Bool("sdl2", false, "a string")
 	flag.Parse()
+	var scr screen.Screen
 	if *runSdl2 {
-		return screen.Sdl2{}.NewScreen(1000, 600)
+		scr = screen.Sdl2{}.NewScreen(1000, 600)
+	} else {
+		scr = screen.Console{}.NewScreen(0, 0) // Console is auto-sized
 	}
-	return screen.Console{}.NewScreen(0, 0) // Console is auto-sized
-}
+	scr.SetKeyboardHandler(keyCodeToInput)
 
-// Handles keyboard input
-func handleKeys() {
-	EvChan := hook.Start()
-	defer hook.End()
-
-	for ev := range EvChan {
-		if ev.Kind == hook.KeyDown {
-			keyCodeToInput(ev.Rawcode)
-		}
-	}
+	return scr
 }
 
 // Translates key code to actual action
-func keyCodeToInput(code uint16) {
+func keyCodeToInput(code int) {
 	// "W"
 	if code == 119 {
 		//forward

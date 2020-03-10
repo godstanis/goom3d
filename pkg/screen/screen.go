@@ -8,6 +8,7 @@ type Screen interface {
 	Clear()
 	Height() int
 	Width() int
+	SetKeyboardHandler(func(int))
 }
 
 const (
@@ -50,5 +51,10 @@ func (scr *DummyScreen) SetPixel(x, y int, symbol uint32) error {
 
 // Render: renders screen content
 func (scr *DummyScreen) Render() {
+	return
+}
+
+// SetKeyboardHandler: sets handler function for input listening
+func (scr *DummyScreen) SetKeyboardHandler(call func(int)) {
 	return
 }

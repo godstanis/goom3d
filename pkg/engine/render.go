@@ -29,8 +29,8 @@ func RenderView(screen screen.Screen) {
 // renderToScreen: actually transfer screen buffer to screen output
 func renderToScreen(screen screen.Screen, footer string) {
 	screen.Render()
-	fmt.Printf("\033[%d;%dH", 0, 0)
-	fmt.Println(footer + "\n" + renderDebugInfo)
+	//fmt.Printf("\033[%d;%dH", 0, 0)
+	//fmt.Println(footer + "\n" + renderDebugInfo)
 }
 
 // Draws actual rendered world objects
