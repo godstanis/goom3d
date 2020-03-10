@@ -57,8 +57,14 @@ jobs:
         cp -r ./assets ./artifacts-win/assets;
         cp -r ./obj ./artifacts-win/obj;
 
-    - name: Upload linux build artifact
+    - name: Upload Linux build artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: "build-${{runner.os}}"
-        path: ./artifacts
+        path: ./artifacts-linux
+
+    - name: Upload Windows build artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: "build-Windows"
+        path: ./artifacts-win
