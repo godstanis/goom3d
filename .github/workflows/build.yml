@@ -23,17 +23,24 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
-
-    - name: Get building dependencies
+        
+    - name: Sdl2 Base dependencies
       run: |
         sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev libsdl2{,-image,-mixer,-ttf,-gfx}-dev;
         sudo apt-get install mingw-w64 unzip;
+      
+    - name: Mkdir_debug
+      run: |
         sudo mkdir /tmp/sdl2-build;
-        ls /tmp/sdl2-build
+        ls /tmp/sdl2-build;
+    - name: Wget_debug
+      run: |
         sudo wget http://libsdl.org/release/SDL2-2.0.10-win32-x64.zip /tmp/sdl2-build;
-        ls /tmp/sdl2-build
+        ls /tmp/sdl2-build;
+    - name: Unzip_debug
+      run: |
         sudo unzip /tmp/sdl2-build/SDL2-2.0.10-win32-x64.zip;
-        ls /tmp/sdl2-build
+        ls /tmp/sdl2-build;
 
     - name: Build-Linux
       run: go build -v .
