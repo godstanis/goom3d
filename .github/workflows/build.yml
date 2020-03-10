@@ -33,6 +33,7 @@ jobs:
       run: |
         sudo mkdir /tmp/sdl2-build;
         sudo mkdir /tmp/sdl2-build/mingw;
+        sudo mkdir /tmp/sdl2-build/dll;
         sudo wget -P /tmp/sdl2-build http://libsdl.org/release/SDL2-devel-2.0.10-mingw.tar.gz;
         sudo tar xvzf /tmp/sdl2-build/SDL2-devel-2.0.10-mingw.tar.gz -C /tmp/sdl2-build/mingw;
         sudo cp -r /tmp/sdl2-build/mingw/SDL2-2.0.10/x86_64-w64-mingw32 /usr;
