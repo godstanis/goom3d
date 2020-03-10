@@ -32,11 +32,11 @@ You can pick any recent build from "Go-Build" job artifacts of  [project's GitHu
 
 You can use one of these two commands to run the game:
 ```bash
-# Console output
+# Console output (.exe for Windows)
 ./goom3d
 ```
 ```shell
-# Sdl2 window output
+# Sdl2 window output (.exe for Windows)
 ./goom3d -sdl2
 ```
 

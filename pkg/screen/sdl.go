@@ -8,12 +8,13 @@ import (
 // Sdl screen represents sdl2 window screen
 type Sdl2 struct {
 	window     *sdl.Window
+	keyHandler func(int)
 	pixelScale int
 }
 
 // NewScreen: empty screen initializer with buffer of empty pixels
 func (scr Sdl2) NewScreen(w, h int) Screen {
-	pixelScale := 4
+	pixelScale := 2
 	if err := sdl.Init(sdl.INIT_VIDEO); err != nil {
 		scr.check(err)
 	}
@@ -22,8 +23,6 @@ func (scr Sdl2) NewScreen(w, h int) Screen {
 	if _, err = window.GetSurface(); err != nil {
 		scr.check(err)
 	}
-
-	scr.runControlsMonitor()
 
 	return &Sdl2{window: window, pixelScale: pixelScale}
 }
@@ -47,6 +46,7 @@ func (scr *Sdl2) Render() {
 	err := scr.window.UpdateSurface()
 	scr.check(err)
 	scr.Clear()
+	scr.handleEvents()
 	sdl.Delay(8) // To prevent false OS not responding warnings
 }
 
@@ -77,22 +77,27 @@ func (scr Sdl2) Width() int {
 	return int(w) / scr.pixelScale
 }
 
-// runControlsMonitor: service method for main screen event listeners
-func (scr Sdl2) runControlsMonitor() {
+// handleEvents: service method for main screen event listeners
+func (scr Sdl2) handleEvents() {
 	// Some controls
-	go func() {
-		for {
-			event := sdl.WaitEvent() // wait here until an event is in the event queue
-			switch t := event.(type) {
-			case *sdl.QuitEvent: // Window close
+	for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
+		switch t := event.(type) {
+		case *sdl.QuitEvent: // Window close
+			os.Exit(0) // Gracefully exit the program
+		case *sdl.KeyboardEvent: // Esc key pressed
+			if t.Keysym.Sym == sdl.K_ESCAPE {
 				os.Exit(0) // Gracefully exit the program
-			case *sdl.KeyboardEvent: // Esc key pressed
-				if t.Keysym.Sym == sdl.K_ESCAPE {
-					os.Exit(0) // Gracefully exit the program
-				}
+			}
+			if t.Type == sdl.KEYDOWN {
+				scr.keyHandler(int(t.Keysym.Sym))
 			}
 		}
-	}()
+	}
+}
+
+// SetKeyboardHandler: sets handler function for input listening
+func (scr *Sdl2) SetKeyboardHandler(call func(int)) {
+	scr.keyHandler = call
 }
 
 // check: service method to panic on errors
