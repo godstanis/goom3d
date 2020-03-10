@@ -38,7 +38,7 @@ jobs:
         sudo tar xvzf /tmp/sdl2-build/SDL2-devel-2.0.10-mingw.tar.gz -C /tmp/sdl2-build/mingw;
         sudo cp -r /tmp/sdl2-build/mingw/SDL2-2.0.10/x86_64-w64-mingw32 /usr;
         sudo wget -P /tmp/sdl2-build/dll http://libsdl.org/release/SDL2-2.0.10-win32-x64.zip;
-        sudo unzip /tmp/sdl2-build/dll SDL2-2.0.10-win32-x64.zip -d /tmp/sdl2-build/dll
+        sudo unzip SDL2-2.0.10-win32-x64.zip -d /tmp/sdl2-build/dll
     - name: Ls /tmp/sdl2-build
       run: ls /tmp/sdl2-build
     - name: Ls /tmp/sdl2-build/mingw
