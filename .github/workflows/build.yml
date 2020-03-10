@@ -28,8 +28,11 @@ jobs:
       run: |
         sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev libsdl2{,-image,-mixer,-ttf,-gfx}-dev;
         sudo apt-get install mingw-w64 unzip;
-        mkdir /tmp/sdl2-build; wget http://libsdl.org/release/SDL2-2.0.10-win32-x64.zip /tmp/sdl2-build
-        unzip /tmp/sdl2-build/SDL2-2.0.10-win32-x64.zip
+        sudo mkdir /tmp/sdl2-build;
+        ls /tmp/sdl2-build
+        sudo wget http://libsdl.org/release/SDL2-2.0.10-win32-x64.zip /tmp/sdl2-build;
+        ls /tmp/sdl2-build
+        sudo unzip /tmp/sdl2-build/SDL2-2.0.10-win32-x64.zip;
         ls /tmp/sdl2-build
 
     - name: Build-Linux
