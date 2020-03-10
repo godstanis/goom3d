@@ -45,7 +45,7 @@ jobs:
     - name: Prepare Linux build artifacts
       run: |
         mkdir ./artifacts-linux;
-        mv ./goom3d ./artifacts;
+        mv ./goom3d ./artifacts-linux;
         cp -r ./assets ./artifacts-linux/assets;
         cp -r ./obj ./artifacts-linux/obj;
         
