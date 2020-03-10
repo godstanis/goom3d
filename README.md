@@ -16,7 +16,7 @@ TODO:
     - [x] Refactor console logic (for cross-compatibility with win/mac/linux)
     - [x] Transfer game objects to specific files
     - [x] Add opengl/sdl2 screen
-    - [ ] Fix windows compilation issues
+    - [x] Fix windows compilation issues
     - [ ] Extend walls collision detection boundaries
   - Gameplay:
     - [ ] Weapon(s) and hitboxes
