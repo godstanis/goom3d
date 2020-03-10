@@ -16,44 +16,58 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-#     - name: Get go dependencies
-#       run: |
-#         go get -v -t -d ./...
-#         if [ -f Gopkg.toml ]; then
-#             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-#             dep ensure
-#         fi
+    - name: Get go dependencies
+      run: |
+        go get -v -t -d ./...
+        if [ -f Gopkg.toml ]; then
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            dep ensure
+        fi
         
-#     - name: Sdl2 Base dependencies
-#       run: |
-#         sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev libsdl2{,-image,-mixer,-ttf,-gfx}-dev;
-#         sudo apt-get install mingw-w64 unzip;
+    - name: Sdl2 Base dependencies
+      run: |
+        sudo apt-get install libx11-xcb-dev libxkbcommon-x11-dev libxtst-dev libsdl2{,-image,-mixer,-ttf,-gfx}-dev;
+        sudo apt-get install mingw-w64 unzip;
       
-    - name: Mkdir_debug
+    - name: Sdl2 Windows dependencies
       run: |
         sudo mkdir /tmp/sdl2-build;
-        ls /tmp/sdl2-build;
-    - name: Ls
-      run: ls /tmp
-    - name: Wget_debug
-      run: sudo wget -P /tmp/sdl2-build http://libsdl.org/release/SDL2-2.0.10-win32-x64.zip
-    - name: Ls
-      run: ls /tmp
-    - name: Unzip_debug
-      run: sudo unzip /tmp/sdl2-build/SDL2-2.0.10-win32-x64.zip
-    - name: Ls
-      run: ls /tmp
-#     - name: Build-Linux
-#       run: go build -v .
+        sudo mkdir /tmp/sdl2-build/mingw;
+        sudo wget -P /tmp/sdl2-build http://libsdl.org/release/SDL2-devel-2.0.10-mingw.tar.gz;
+        sudo unzip /tmp/sdl2-build/SDL2-devel-2.0.10-mingw.tar.gz -d /tmp/sdl2-build/mingw;
+        sudo cp -r /tmp/sdl2-build/mingw/SDL2-2.0.10/x86_64-w64-mingw32 /usr;
+        sudo wget -P /tmp/sdl2-build/dll SDL2-2.0.10-win32-x64.zip;
+        sudo unzip /tmp/sdl2-build/dll SDL2-2.0.10-win32-x64.zip -d /tmp/sdl2-build/dll
+    - name: Ls /tmp/sdl2-build
+      run: ls /tmp/sdl2-build
+    - name: Ls /tmp/sdl2-build/mingw
+      run: ls /tmp/sdl2-build/mingw
+    - name: Ls /tmp/sdl2-build/dll
+      run: ls /tmp/sdl2-build/dll
 
-#     - name: Build-Windows
-#       run: env CGO_ENABLED="1" CC="/usr/bin/x86_64-w64-mingw32-gcc" GOOS="windows" CGO_LDFLAGS="-lmingw32 -lSDL2" CGO_CFLAGS="-D_REENTRANT" go build -x goom3d.go
+    - name: Build-Linux
+      run: go build -v .
+
+    - name: Build-Windows
+      run: env CGO_ENABLED="1" CC="/usr/bin/x86_64-w64-mingw32-gcc" GOOS="windows" CGO_LDFLAGS="-lmingw32 -lSDL2" CGO_CFLAGS="-D_REENTRANT" go build -x goom3d.go
     
-#     - name: Prepare build artifacts
-#       run: mkdir ./artifacts; mv ./goom3d ./artifacts; cp -r ./assets ./artifacts/assets; cp -r ./obj ./artifacts/obj
+    - name: Prepare Linux build artifacts
+      run: |
+        mkdir ./artifacts-linux;
+        mv ./goom3d ./artifacts;
+        cp -r ./assets ./artifacts-linux/assets;
+        cp -r ./obj ./artifacts-linux/obj
+        
+    - name: Prepare Windows build artifacts
+      run: |
+        mkdir ./artifacts-win;
+        mv ./goom3d.exe ./artifacts-win;
+        mv /tmp/sdl2-build/dll/SDL2.dll ./artifacts-win
+        cp -r ./assets ./artifacts-win/assets;
+        cp -r ./obj ./artifacts-win/obj
 
-#     - name: Upload build artifact
-#       uses: actions/upload-artifact@v1.0.0
-#       with:
-#         name: "build-${{runner.os}}"
-#         path: ./artifacts
+    - name: Upload linux build artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: "build-${{runner.os}}"
+        path: ./artifacts
