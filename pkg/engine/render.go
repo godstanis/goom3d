@@ -29,8 +29,8 @@ func RenderView(screen screen.Screen) {
 // renderToScreen: actually transfer screen buffer to screen output
 func renderToScreen(screen screen.Screen, footer string) {
 	screen.Render()
-	//fmt.Printf("\033[%d;%dH", 0, 0)
-	//fmt.Println(footer + "\n" + renderDebugInfo)
+	fmt.Printf("\033[%d;%dH", 0, 0)
+	fmt.Println(footer + "\n" + renderDebugInfo)
 }
 
 // Draws actual rendered world objects
@@ -42,6 +42,7 @@ func drawWorld(screen screen.Screen) {
 		traversed := float64(i) / float64(screen.Width()) // How much of a screen space has been traversed (0.0 to 1.0, i.e. 0.3 is 30%)
 		angle := Degree{}.NewDegree(lAngle.Get() + (curFov * traversed))
 		hit, distance, tile, tileP := rayCast(curX, curY, angle, viewDistance)
+		//correctedDist := distance*math.Cos(curAngle.Plus(-angle.Get())*(math.Pi/180)) todo: explore perspective correction more
 
 		if hit {
 			drawTexturedWallColumn(screen, tile, i, distToHeight(distance, screen.Height()), tileP) // Project walls on screen
