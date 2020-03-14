@@ -4,34 +4,42 @@ player 6.4-4.7 210.0
 
 # Texture to map tiles mappings
 
-wall-texture 1 assets/tiles/bricks.png
-wall-texture 2 assets/tiles/smooth_stone.png
-wall-texture 3 assets/tiles/oak_log.png
-wall-texture 4 assets/tiles/dark_oak_planks.png
-wall-texture 5 assets/tiles/cobble.png
+wall-texture 1 assets/tiles/tile066.png
+wall-texture 2 assets/tiles/tile069.png
+wall-texture 3 assets/tiles/tile068.png
+wall-texture 4 assets/tiles/tile073.png
+wall-texture 5 assets/tiles/tile076.png
+wall-texture 6 assets/tiles/tile071.png
+wall-texture 7 assets/tiles/tile079.png
+wall-texture 8 assets/tiles/tile075.png
+wall-texture 9 assets/tiles/door_red.png
+wall-texture 10 assets/tiles/tile116.png
+wall-texture 11 assets/tiles/tile067.png
 
 # Actual map
 
-wall-row 2-2-2-2-2-2-2-2-2-2-2-2-2
-wall-row 2-1-0-0-0-0-0-0-0-0-0-4-2
-wall-row 2-0-0-0-0-0-0-0-0-0-0-0-2
-wall-row 2-0-0-0-0-0-0-0-0-0-0-0-2
-wall-row 2-0-0-0-2-0-0-0-0-0-0-0-2
-wall-row 2-0-0-0-0-0-0-5-3-0-3-5-2
-wall-row 2-0-0-0-0-0-0-3-0-0-0-0-2
-wall-row 2-0-0-0-0-0-0-3-0-0-0-0-2
-wall-row 2-2-2-2-2-2-2-2-2-2-2-2-2
+wall-row 1-1-1-2-1-11-3-2-1-1-9-1-1
+wall-row 1-4-0-0-0-0-0-0-0-0-0-4-1
+wall-row 1-0-0-0-0-0-0-0-0-0-0-0-9
+wall-row 1-0-0-0-0-0-0-0-0-0-0-0-2
+wall-row 1-0-0-0-5-0-0-0-0-0-0-0-1
+wall-row 1-0-0-0-0-0-0-6-7-0-7-6-2
+wall-row 1-0-0-0-0-0-0-6-0-0-0-0-10
+wall-row 1-0-0-0-0-0-0-6-0-0-0-0-10
+wall-row 1-1-1-1-2-3-3-1-1-8-1-1-1
 
 # Sprites
 
-sprite assets/sprites/pointer.png 2.3-1.3 1.0 1 0
-sprite assets/sprites/graham.png 10.3-1.3 1.0 1 0
-sprite assets/sprites/pigscene.png 8.5-6.3 1.3 1 0
-sprite assets/sprites/burning_skull.png 1.3-7.6 1.3 1 0
+sprite assets/sprites/port-en-bessin.png 2.3-1.3 1 1 0
+sprite assets/sprites/gogh.png 8.5-6.3 1.4 1 0
+sprite assets/sprites/ginevra-de-benci.png 1.3-7.6 1.3 1 0
+sprite assets/sprites/world_map.png 4.5-7.6 1.3 1 0
 
-sprite assets/sprites/barrels.png 1.8-2.5 1.0 1 2
-sprite assets/sprites/barrels.png 1.3-2.5 1.0 1 2
-sprite assets/sprites/barrels.png 11.7-6.3 1.0 1 2
+sprite assets/sprites/barrels_beer.png 1.8-2.3 1.0 1 2
+sprite assets/sprites/barrels.png 1.3-2.5 1.2 1 2
+sprite assets/sprites/barrel_blue.png 1.5-3.1 0.6 1 2
+sprite assets/sprites/barrels.png 11.3-6.3 1.0 1 2
+sprite assets/sprites/barrels_beer.png 11.7-6.8 1.0 1 2
 sprite assets/sprites/barrels.png 6.7-7.7 1.0 1 2
 sprite assets/sprites/c-box.png 11.7-7.7 1.2 1 2
 sprite assets/sprites/c-box.png 11.6-7.8 1.2 1 2
@@ -40,6 +48,7 @@ sprite assets/sprites/chandelier.png 4.5-3.5 1.0 0 1
 sprite assets/sprites/chandelier.png 5.5-4.5 1.0 0 1
 sprite assets/sprites/chandelier.png 3.5-4.5 1.0 0 1
 sprite assets/sprites/chandelier.png 4.5-5.5 1.0 0 1
+sprite assets/sprites/chandelier.png 10-7 1.0 0 1
 
 sprite assets/sprites/table.png 5.3-4.3 1.0 0 2
-sprite assets/sprites/chair.png 5.3-4.8 1 0 2
+sprite assets/sprites/chair.png 5.3-4.8 0.5 0 2
