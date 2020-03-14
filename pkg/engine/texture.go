@@ -15,10 +15,10 @@ var TileTextures = map[int][][]uint32{}
 // 	For example if our texture is only 5 symbols high but we want to render it on screen with 10 height we just get the relation
 // 	in this case is 5/10=0.5 of our screen row per texture row (i.e. 1 texture row for each screen row)
 func scaleTextureVertically(texture [][]uint32, h int) (scaled [][]uint32) {
-	scaled = make([][]uint32, h)
+	scaled = make([][]uint32, h+1)
 
 	rel := float64(len(texture)-1) / float64(h)
-	for i := 0; i < h; i++ {
+	for i := 0; i <= h; i++ {
 		scaled[i] = texture[int(float64(i)*rel)]
 	}
 

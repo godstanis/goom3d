@@ -47,16 +47,17 @@ func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, angle Degree
 		return
 	}
 
-	spriteHeight := int(float64(distToHeight(playerDistToSprite(sprite), screen.Height())) * sprite.Scale / 2)
-	if spriteHeight == 0 {
+	baseSpriteH := distToHeight(playerDistToSprite(sprite), screen.Height())/2
+	scaledSpriteH := int(float64(baseSpriteH) * sprite.Scale)
+	if scaledSpriteH == 0 {
 		return
 	}
 
-	spriteScreenRow := calculateSpriteStart(screen, sprite, spriteHeight)
-	spriteCol := int(math.Round(sP * float64(len(sprite.Texture[0])-1)))
-	scaledTexture := scaleTextureVertically(sprite.Texture, spriteHeight+1)
+	spriteScreenRow := calculateSpriteStart(screen, sprite, baseSpriteH)
+	spriteCol := int(sP * float64(len(sprite.Texture[0])))
+	scaledTexture := scaleTextureVertically(sprite.Texture, scaledSpriteH)
 
-	for i := 0; i <= spriteHeight; i++ {
+	for i := 0; i <= scaledSpriteH; i++ {
 		spriteScreenRow++
 		if spriteScreenRow < 0 || scaledTexture[i][spriteCol] == 0 {
 			continue
@@ -67,14 +68,14 @@ func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, angle Degree
 }
 
 // Calculates where on screen a sprite starts rendering (may return negative value, meaning starting point is UP out of screen bounds)
-func calculateSpriteStart(screen screen.Screen, sprite Sprite, spriteHeight int) int {
+func calculateSpriteStart(screen screen.Screen, sprite Sprite, baseSpriteHeight int) int {
 	switch sprite.Align {
 	case BottomAlign:
-		return screen.Height() / 2
+		return screen.Height()/2 + int(float64(baseSpriteHeight)*(1-sprite.Scale))
 	case CenterAlign:
-		return screen.Height()/2 - spriteHeight/2
+		return screen.Height()/2 - int(float64(baseSpriteHeight) * sprite.Scale)/2
 	case TopAlign:
-		return screen.Height()/2 - spriteHeight
+		return screen.Height()/2 - baseSpriteHeight
 	default:
 		return 0
 	}
