@@ -1,17 +1,18 @@
 package screen
 
 import (
-	"github.com/gdamore/tcell"
 	"os"
+
+	"github.com/gdamore/tcell"
 )
 
 // Console represents symbols screen buffer (where each pixel is symbol)
 type Console struct {
 	Screen     tcell.Screen
-	keyHandler func(int)
+	keyHandler func(int, bool)
 }
 
-// NewScreen: empty screen initializer with buffer of empty pixels
+// NewScreen empty screen initializer with buffer of empty pixels
 func (scr Console) NewScreen(w, h int) Screen {
 	tcell.SetEncodingFallback(tcell.EncodingFallbackASCII)
 	s, err := tcell.NewScreen()
@@ -31,19 +32,19 @@ func (scr Console) NewScreen(w, h int) Screen {
 	return &screen
 }
 
-// SetPixel: puts a pixel on screen
+// SetPixel puts a pixel on screen
 func (scr *Console) SetPixel(x, y int, color uint32) error {
 	scr.Screen.SetContent(x, y, ' ', nil, tcell.StyleDefault.Background(tcell.NewHexColor(int32(color))))
 	return nil
 }
 
-// Render: renders screen to console
+// Render renders screen to console
 func (scr *Console) Render() {
 	scr.Screen.Show()
 	scr.Clear()
 }
 
-// Clear: clears the screen
+// Clear clears the screen
 func (scr *Console) Clear() {
 	for i := 0; i <= scr.Height(); i++ {
 		for j := 0; j <= scr.Width(); j++ {
@@ -56,24 +57,24 @@ func (scr *Console) Clear() {
 	}
 }
 
-// Height: get current screen height
+// Height get current screen height
 func (scr Console) Height() int {
 	_, h := scr.Screen.Size()
 	return h
 }
 
-// Width: get current screen width
+// Width get current screen width
 func (scr Console) Width() int {
 	w, _ := scr.Screen.Size()
 	return w
 }
 
-// SetKeyboardHandler: sets handler function for input listening
-func (scr *Console) SetKeyboardHandler(call func(int)) {
+// SetKeyboardHandler sets handler function for input listening
+func (scr *Console) SetKeyboardHandler(call func(int, bool)) {
 	scr.keyHandler = call
 }
 
-// runControlsMonitor: service method for main screen event listeners
+// runControlsMonitor service method for main screen event listeners
 func (scr *Console) runControlsMonitor() {
 	// Some controls
 	go func() {
@@ -81,7 +82,7 @@ func (scr *Console) runControlsMonitor() {
 			ev := scr.Screen.PollEvent()
 			switch ev := ev.(type) {
 			case *tcell.EventKey:
-				scr.keyHandler(int(ev.Rune()))
+				scr.keyHandler(int(ev.Rune()), false)
 				switch ev.Key() {
 				case tcell.KeyCtrlC, tcell.KeyEscape:
 					scr.Screen.Fini()

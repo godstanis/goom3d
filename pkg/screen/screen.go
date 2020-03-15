@@ -8,7 +8,7 @@ type Screen interface {
 	Clear()
 	Height() int
 	Width() int
-	SetKeyboardHandler(func(int))
+	SetKeyboardHandler(func(int, bool))
 }
 
 const (
@@ -19,42 +19,42 @@ const (
 	CL_WHITE  = 0xF0F0F0
 )
 
-// Dummy screen with no functionality for debug purposes
+// DummyScreen with no functionality for debug purposes
 type DummyScreen struct {
 	w, h int
 }
 
-// NewScreen: empty screen initializer with buffer of empty pixels
+// NewScreen empty screen initializer with buffer of empty pixels
 func (scr DummyScreen) NewScreen(w, h int) Screen {
 	return &DummyScreen{w: w, h: h}
 }
 
-// Clear: clears the screen
+// Clear clears the screen
 func (scr *DummyScreen) Clear() {
 	return
 }
 
-// Height: get current screen height
+// Height get current screen height
 func (scr DummyScreen) Height() int {
 	return scr.h
 }
 
-// Width: get current screen width
+// Width get current screen width
 func (scr DummyScreen) Width() int {
 	return scr.w
 }
 
-// SetPixel: puts a pixel on screen
+// SetPixel puts a pixel on screen
 func (scr *DummyScreen) SetPixel(x, y int, symbol uint32) error {
 	return nil
 }
 
-// Render: renders screen content
+// Render renders screen content
 func (scr *DummyScreen) Render() {
 	return
 }
 
-// SetKeyboardHandler: sets handler function for input listening
-func (scr *DummyScreen) SetKeyboardHandler(call func(int)) {
+// SetKeyboardHandler sets handler function for input listening
+func (scr *DummyScreen) SetKeyboardHandler(call func(int, bool)) {
 	return
 }

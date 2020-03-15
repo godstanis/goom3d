@@ -1,18 +1,19 @@
 package screen
 
 import (
-	"github.com/veandco/go-sdl2/sdl"
 	"os"
+
+	"github.com/veandco/go-sdl2/sdl"
 )
 
-// Sdl screen represents sdl2 window screen
+// Sdl2 screen represents sdl2 window screen
 type Sdl2 struct {
 	window     *sdl.Window
-	keyHandler func(int)
+	keyHandler func(int, bool)
 	pixelScale int
 }
 
-// NewScreen: empty screen initializer with buffer of empty pixels
+// NewScreen empty screen initializer with buffer of empty pixels
 func (scr Sdl2) NewScreen(w, h int) Screen {
 	pixelScale := 2
 	if err := sdl.Init(sdl.INIT_VIDEO); err != nil {
@@ -27,7 +28,7 @@ func (scr Sdl2) NewScreen(w, h int) Screen {
 	return &Sdl2{window: window, pixelScale: pixelScale}
 }
 
-// SetPixel: puts a pixel on screen
+// SetPixel puts a pixel on screen
 func (scr *Sdl2) SetPixel(x, y int, color uint32) error {
 	surface, err := scr.window.GetSurface()
 	scr.check(err)
@@ -41,7 +42,7 @@ func (scr *Sdl2) SetPixel(x, y int, color uint32) error {
 	return nil
 }
 
-// Render: renders screen to sdl window
+// Render renders screen to sdl window
 func (scr *Sdl2) Render() {
 	err := scr.window.UpdateSurface()
 	scr.check(err)
@@ -50,7 +51,7 @@ func (scr *Sdl2) Render() {
 	sdl.Delay(8) // To prevent false OS not responding warnings
 }
 
-// Clear: clears the screen
+// Clear clears the screen
 func (scr *Sdl2) Clear() {
 	err := scr.window.UpdateSurface()
 	scr.check(err)
@@ -65,21 +66,29 @@ func (scr *Sdl2) Clear() {
 	return
 }
 
-// Height: get current screen height
+// Height get current screen height
 func (scr Sdl2) Height() int {
 	_, h := scr.window.GetSize()
 	return int(h) / scr.pixelScale
 }
 
-// Width: get current screen width
+// Width get current screen width
 func (scr Sdl2) Width() int {
 	w, _ := scr.window.GetSize()
 	return int(w) / scr.pixelScale
 }
 
-// handleEvents: service method for main screen event listeners
+// handleEvents service method for main screen event listeners
 func (scr Sdl2) handleEvents() {
-	// Some controls
+	// Handle keyboard states
+	keysStates := sdl.GetKeyboardState()
+	for scancode, pressed := range keysStates {
+		if pressed == 1 {
+			scr.keyHandler(int(sdl.GetKeyFromScancode(sdl.Scancode(scancode))), true)
+		}
+	}
+
+	// Sdl-specific events
 	for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 		switch t := event.(type) {
 		case *sdl.QuitEvent: // Window close
@@ -88,15 +97,12 @@ func (scr Sdl2) handleEvents() {
 			if t.Keysym.Sym == sdl.K_ESCAPE {
 				os.Exit(0) // Gracefully exit the program
 			}
-			if t.Type == sdl.KEYDOWN {
-				scr.keyHandler(int(t.Keysym.Sym))
-			}
 		}
 	}
 }
 
-// SetKeyboardHandler: sets handler function for input listening
-func (scr *Sdl2) SetKeyboardHandler(call func(int)) {
+// SetKeyboardHandler sets handler function for input listening
+func (scr *Sdl2) SetKeyboardHandler(call func(int, bool)) {
 	scr.keyHandler = call
 }
 

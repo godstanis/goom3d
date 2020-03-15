@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+
 	"github.com/godstanis/goom3d/pkg/engine"
 	"github.com/godstanis/goom3d/pkg/screen"
 )
@@ -33,35 +34,31 @@ func getScreen() screen.Screen {
 }
 
 // Translates key code to actual action
-func keyCodeToInput(code int) {
-	// "W"
-	if code == 119 {
-		//forward
-		engine.StrafePlayerV(walkSpeed)
+//
+// The time arguments determines if actions should be adjusted by deltatime.
+// it's usefull because we can't actually differentiate press down/up key events from terminal
+// so it will only send key events in intervals. On the other hand engines like OpenGL or Sdl2 could
+// send these events while key is pressed (without timed intervals)
+func keyCodeToInput(code int, time bool) {
+	correctTiming := 1.0
+	if time {
+		correctTiming = engine.TimeElapsed * 40
 	}
-	// "S"
-	if code == 115 {
-		//backward
-		engine.StrafePlayerV(-walkSpeed)
-	}
-	// "E"
-	if code == 101 {
-		//turn right
-		engine.TurnPlayer(rotateSpeed)
-	}
-	// "Q"
-	if code == 113 {
-		//turn left
-		engine.TurnPlayer(-rotateSpeed)
-	}
-	// "A"
-	if code == 97 {
-		//strafe left
-		engine.StrafePlayerH(-walkSpeed)
-	}
-	// "D"
-	if code == 100 {
-		//strafe right
-		engine.StrafePlayerH(walkSpeed)
+	cWalkSpeed := walkSpeed * correctTiming
+	cRotateSpeed := rotateSpeed * correctTiming
+
+	switch code {
+	case 119: // "W" - forward
+		engine.StrafePlayerV(cWalkSpeed)
+	case 97: // "A" - strafe left
+		engine.StrafePlayerH(-cWalkSpeed)
+	case 115: // "S" - backward
+		engine.StrafePlayerV(-cWalkSpeed)
+	case 100: // "D" - strafe right
+		engine.StrafePlayerH(cWalkSpeed)
+	case 101: // "E" - turn right
+		engine.TurnPlayer(cRotateSpeed)
+	case 113: // "Q" - turn left
+		engine.TurnPlayer(-cRotateSpeed)
 	}
 }

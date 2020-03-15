@@ -1,23 +1,24 @@
-// Rendering data and methods
+// Package engine provides function for render and world object manipulations
 package engine
 
 import (
 	"fmt"
-	"github.com/godstanis/goom3d/pkg/screen"
 	"math"
 	"time"
+
+	"github.com/godstanis/goom3d/pkg/screen"
 )
 
 // Map structure
 var Map [][]int
 
-// Elapsed time in seconds since previous frame. Could be used to stabilize time-dependent operations like moving or animations
+// TimeElapsed is elapsed time in seconds since previous frame. Could be used to stabilize time-dependent operations like moving or animations
 var TimeElapsed float64
 
 // Internal variable to output any debug related information to console row.
 var renderDebugInfo string
 
-// Renders a frame
+// RenderView renders a frame
 func RenderView(screen screen.Screen) {
 	start := time.Now()
 	drawWorld(screen)
