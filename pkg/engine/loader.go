@@ -4,20 +4,20 @@ import (
 	"bufio"
 	"fmt"
 	"image"
-	_ "image/jpeg"
-	_ "image/png"
+	_ "image/jpeg" // Use initializers
+	_ "image/png"  // -//-
 	"os"
 	"strconv"
 	"strings"
 )
 
-// Loader: is used to initialize game objects and scenes
+// Loader is used to initialize game objects and scenes
 type Loader struct {
 	wtb map[string]int        // Walls texture cache
 	stb map[string][][]uint32 // Sprites texture cache
 }
 
-// LoadScene: loads scene by scene file path
+// LoadScene loads scene by scene file path
 func (ldr *Loader) LoadScene(scene string) {
 	ldr.Flush() // Clear all previously generated stuff
 
@@ -46,7 +46,7 @@ func (ldr *Loader) LoadScene(scene string) {
 	ldr.cleanUpMap()
 }
 
-// Flush: clears all loaded data and removes it from world and from memory
+// Flush clears all loaded data and removes it from world and from memory
 func (ldr *Loader) Flush() {
 	Map = make([][]int, 0)
 	TileTextures = make(map[int][][]uint32, 0)
@@ -54,16 +54,16 @@ func (ldr *Loader) Flush() {
 	ldr.wtb, ldr.stb = nil, nil
 }
 
-// initPlayer: initializes player scene command
+// initPlayer initializes player scene command
 func (ldr *Loader) initPlayer(sc *bufio.Scanner) {
 	elements := strings.Split(sc.Text(), " ")
 	x, _ := strconv.ParseFloat(strings.Split(elements[1], "-")[0], 64)
 	y, _ := strconv.ParseFloat(strings.Split(elements[1], "-")[1], 64)
 	angle, _ := strconv.ParseFloat(elements[2], 64)
-	SetPlayerPosition(x, y, Degree{angle})
+	SetPlayerPosition(x, y, angle)
 }
 
-// storeWallTexture: stores wall texture in memory
+// storeWallTexture stores wall texture in memory
 func (ldr *Loader) storeWallTexture(sc *bufio.Scanner) {
 	elements := strings.Split(sc.Text(), " ")
 	tile, _ := strconv.Atoi(elements[1])
@@ -79,7 +79,7 @@ func (ldr *Loader) storeWallTexture(sc *bufio.Scanner) {
 	TileTextures[tile] = ldr.ConvertImageToTexture(texture)
 }
 
-// generateMapRow: generates map row and stores it in memory
+// generateMapRow generates map row and stores it in memory
 func (ldr *Loader) generateMapRow(sc *bufio.Scanner) {
 	elements := strings.Split(sc.Text(), " ")
 	tilesS := strings.Split(elements[1], "-")
@@ -93,7 +93,7 @@ func (ldr *Loader) generateMapRow(sc *bufio.Scanner) {
 	Map = append(Map, tilesI)
 }
 
-// cleanUpMap: checks if there are any broken tiles without textures loaded
+// cleanUpMap checks if there are any broken tiles without textures loaded
 func (ldr Loader) cleanUpMap() {
 	for _, mr := range Map {
 		for _, tile := range mr {
@@ -104,7 +104,7 @@ func (ldr Loader) cleanUpMap() {
 	}
 }
 
-// tileIsValid: checks if tile actually has any textures attached to it
+// tileIsValid checks if tile actually has any textures attached to it
 func (ldr Loader) tileIsValid(tile int) bool {
 	for _, val := range ldr.wtb {
 		if val == tile {
@@ -114,7 +114,7 @@ func (ldr Loader) tileIsValid(tile int) bool {
 	return false
 }
 
-// initSprite: initializes sprite defined in scene command line
+// initSprite initializes sprite defined in scene command line
 func (ldr *Loader) initSprite(sc *bufio.Scanner) {
 	elements := strings.Split(sc.Text(), " ")
 
@@ -141,7 +141,7 @@ func (ldr *Loader) initSprite(sc *bufio.Scanner) {
 	})
 }
 
-// ConvertImageToTexture: converts actual image file to engine texture object
+// ConvertImageToTexture converts actual image file to engine texture object
 func (ldr Loader) ConvertImageToTexture(fname string) [][]uint32 {
 	fmt.Printf("Loading texture '%s'...\n", fname)
 	reader, err := os.Open(fname)

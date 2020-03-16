@@ -5,14 +5,14 @@ type Degree struct {
 	Value float64
 }
 
-// Creates new angle object
+// NewDegree creates new angle object
 func (dgr Degree) NewDegree(angle float64) Degree {
 	ndgr := Degree{}
 	ndgr.Set(angle)
 	return ndgr
 }
 
-// Sets and normalizes angle
+// Set sets and normalizes angle
 func (dgr *Degree) Set(angle float64) {
 	if angle >= 360 {
 		angle = angle - 360
@@ -23,18 +23,18 @@ func (dgr *Degree) Set(angle float64) {
 	dgr.Value = angle
 }
 
-// Adds angle
+// Add adds angle
 func (dgr *Degree) Add(angle float64) {
 	dgr.Set(dgr.Get() + angle)
 }
 
-// Returns adjusted angle value, no sets performed
+// Plus returns adjusted angle value, no sets performed
 func (dgr Degree) Plus(angle float64) float64 {
 	dgr.Set(dgr.Get() + angle)
 	return dgr.Get()
 }
 
-// Gets stored angle value
+// Get gets stored angle value
 func (dgr Degree) Get() float64 {
 	return dgr.Value
 }

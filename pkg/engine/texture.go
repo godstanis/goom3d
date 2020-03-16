@@ -1,11 +1,12 @@
-// Texture mapping related stuff
 package engine
+
+// Texture mapping related stuff
 
 import (
 	"math"
 )
 
-// Texture sets for tile values
+// TileTextures - Texture sets for tile values
 var TileTextures = map[int][][]uint32{}
 
 // Scales 2d texture vertically to fit integer h proportionally

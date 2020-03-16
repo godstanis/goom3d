@@ -1,9 +1,10 @@
 package engine
 
 import (
-	"github.com/godstanis/goom3d/pkg/screen"
 	"math"
 	"sort"
+
+	"github.com/godstanis/goom3d/pkg/screen"
 )
 
 // Sprite alignment
@@ -34,7 +35,7 @@ func drawSpritesColumn(screen screen.Screen, col int, angle Degree, distanceToWa
 
 	for _, sprite := range Sprites {
 		// Draw sprite column if it is not behind any walls
-		if playerDistToSprite(*sprite) < distanceToWall {
+		if cPlayerDistToSprite(*sprite) < distanceToWall {
 			drawSpriteColumn(screen, *sprite, col, angle)
 		}
 	}
@@ -47,7 +48,7 @@ func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, angle Degree
 		return
 	}
 
-	baseSpriteH := distToHeight(playerDistToSprite(sprite), screen.Height())/2
+	baseSpriteH := distToHeight(cPlayerDistToSprite(sprite), screen.Height()) / 2
 	scaledSpriteH := int(float64(baseSpriteH) * sprite.Scale)
 	if scaledSpriteH == 0 {
 		return
@@ -73,7 +74,7 @@ func calculateSpriteStart(screen screen.Screen, sprite Sprite, baseSpriteHeight 
 	case BottomAlign:
 		return screen.Height()/2 + int(float64(baseSpriteHeight)*(1-sprite.Scale))
 	case CenterAlign:
-		return screen.Height()/2 - int(float64(baseSpriteHeight) * sprite.Scale)/2
+		return screen.Height()/2 - int(float64(baseSpriteHeight)*sprite.Scale)/2
 	case TopAlign:
 		return screen.Height()/2 - baseSpriteHeight
 	default:
@@ -116,6 +117,13 @@ func playerAngleToSprite(sprite Sprite) Degree {
 // Calculates distance between player and the sprite
 func playerDistToSprite(sprite Sprite) float64 {
 	return distToSprite(curX, curY, sprite)
+}
+
+// Calculates perpendicular corrected distance between player and the sprite
+func cPlayerDistToSprite(sprite Sprite) float64 {
+	vectorToPlayerView := curVector.NewRotated(-playerAngleToSprite(sprite).Get())
+	correction := math.Cos(vectorToPlayerView.Angle().Get() * math.Pi / 180)
+	return playerDistToSprite(sprite) * correction
 }
 
 // Calculates distance to sprite from the given points

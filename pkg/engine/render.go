@@ -23,7 +23,7 @@ func RenderView(screen screen.Screen) {
 	start := time.Now()
 	drawWorld(screen)
 	drawUI(screen)
-	renderToScreen(screen, fmt.Sprintf("FPS: %6.2f; POV:%4.2f; FOV:%4.2f, player_pos:(X:%9.4f,Y:%9.4f)", 1/TimeElapsed, curAngle, curFov, curX, curY))
+	renderToScreen(screen, fmt.Sprintf("FPS: %6.2f; POV:%4.2f; FOV:%4.2f, player_pos:(X:%9.4f,Y:%9.4f)", 1/TimeElapsed, curVector.Angle().Get(), curFov, curX, curY))
 	TimeElapsed = time.Since(start).Seconds()
 }
 
@@ -36,19 +36,20 @@ func renderToScreen(screen screen.Screen, footer string) {
 
 // Draws actual rendered world objects
 func drawWorld(screen screen.Screen) {
-	lAngle := Degree{}.NewDegree(curAngle.Get() - curFov/2)
-
+	leftVector := Vector{X: -curVector.Y, Y: curVector.X} // leftVector is current player's dir vector rotated 90 degrees left
 	// Traverse each row of our screen, cast a ray and render it to screen buffer
 	for i := 0; i <= screen.Width(); i++ {
-		traversed := float64(i) / float64(screen.Width()) // How much of a screen space has been traversed (0.0 to 1.0, i.e. 0.3 is 30%)
-		angle := Degree{}.NewDegree(lAngle.Get() + (curFov * traversed))
-		hit, distance, tile, tileP := rayCast(curX, curY, angle, viewDistance)
-		//correctedDist := distance*math.Cos(curAngle.Plus(-angle.Get())*(math.Pi/180)) todo: explore perspective correction more
+		progress := float64(i)/float64(screen.Width()) - 0.5 // -0.5 to 0.5
+		// *2 is 90 FOV TODO: implement fov to this diff calculation
+		stepX, stepY := curVector.X+progress*(leftVector.X*2), curVector.Y+progress*(leftVector.Y*2)
+		curVector := Vector{X: stepX, Y: stepY}
+
+		hit, distanceToWall, tile, tileP := rayCast(curX, curY, curVector, viewDistance)
 
 		if hit {
-			drawTexturedWallColumn(screen, tile, i, distToHeight(distance, screen.Height()), tileP) // Project walls on screen
+			drawTexturedWallColumn(screen, tile, i, distToHeight(distanceToWall, screen.Height()), tileP) // Project walls on screen
 		}
-		drawSpritesColumn(screen, i, angle, distance) // Project sprites on screen
+		drawSpritesColumn(screen, i, curVector.Angle(), distanceToWall) // Project sprites on screen
 	}
 }
 
