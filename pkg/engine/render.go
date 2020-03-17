@@ -23,7 +23,7 @@ func RenderView(screen screen.Screen) {
 	start := time.Now()
 	drawWorld(screen)
 	drawUI(screen)
-	renderToScreen(screen, fmt.Sprintf("FPS: %6.2f; POV:%4.2f; FOV:%4.2f, player_pos:(X:%9.4f,Y:%9.4f)", 1/TimeElapsed, curVector.Angle().Get(), curFov, curX, curY))
+	renderToScreen(screen, fmt.Sprintf("FPS: %6.2f; POV:%4.2f; FOV:%4.2f, player_pos:(X:%9.4f,Y:%9.4f)", 1/TimeElapsed, curVector.Angle(), curFov, curX, curY))
 	TimeElapsed = time.Since(start).Seconds()
 }
 
