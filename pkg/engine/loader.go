@@ -32,7 +32,7 @@ func (ldr *Loader) LoadScene(scene string) {
 		switch strings.Split(fs.Text(), " ")[0] {
 		case "#":
 		case "player":
-			fmt.Println("Initializing player...")
+			//fmt.Println("Initializing player...")
 			ldr.initPlayer(fs)
 		case "wall-texture":
 			ldr.storeWallTexture(fs)
@@ -42,7 +42,7 @@ func (ldr *Loader) LoadScene(scene string) {
 			ldr.initSprite(fs)
 		}
 	}
-	fmt.Println("Checking tile definitions...")
+	//fmt.Println("Checking tile definitions...")
 	ldr.cleanUpMap()
 }
 
@@ -143,7 +143,7 @@ func (ldr *Loader) initSprite(sc *bufio.Scanner) {
 
 // ConvertImageToTexture converts actual image file to engine texture object
 func (ldr Loader) ConvertImageToTexture(fname string) [][]uint32 {
-	fmt.Printf("Loading texture '%s'...\n", fname)
+	//fmt.Printf("Loading texture '%s'...\n", fname)
 	reader, err := os.Open(fname)
 	if err != nil {
 		panic(err)

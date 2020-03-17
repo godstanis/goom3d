@@ -49,7 +49,7 @@ func drawWorld(screen screen.Screen) {
 		if hit {
 			drawTexturedWallColumn(screen, tile, i, distToHeight(distanceToWall, screen.Height()), tileP) // Project walls on screen
 		}
-		drawSpritesColumn(screen, i, curVector.Angle(), distanceToWall) // Project sprites on screen
+		drawSpritesColumn(screen, i, curVector, distanceToWall) // Project sprites on screen
 	}
 }
 

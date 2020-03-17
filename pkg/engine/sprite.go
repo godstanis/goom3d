@@ -27,23 +27,23 @@ type Sprite struct {
 var Sprites []*Sprite
 
 // Draws sprites column on screen
-func drawSpritesColumn(screen screen.Screen, col int, angle Degree, distanceToWall float64) {
+func drawSpritesColumn(screen screen.Screen, col int, dir Vector, distanceToWall float64) {
 	// We should sort all our sprites by distance so closest are rendered last
 	sort.Slice(Sprites, func(i, j int) bool {
-		return playerDistToSprite(*Sprites[i]) > playerDistToSprite(*Sprites[j])
+		return cPlayerDistToSprite(*Sprites[i]) > cPlayerDistToSprite(*Sprites[j])
 	})
 
 	for _, sprite := range Sprites {
 		// Draw sprite column if it is not behind any walls
 		if cPlayerDistToSprite(*sprite) < distanceToWall {
-			drawSpriteColumn(screen, *sprite, col, angle)
+			drawSpriteColumn(screen, *sprite, col, dir)
 		}
 	}
 }
 
 // Draws one column for specific sprite on screen
-func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, angle Degree) {
-	sees, sP := seesSprite(angle, sprite)
+func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, dir Vector) {
+	sees, sP := seesSprite(dir, sprite)
 	if !sees {
 		return
 	}
@@ -85,33 +85,21 @@ func calculateSpriteStart(screen screen.Screen, sprite Sprite, baseSpriteHeight 
 // Detects if a sprite on specific angle is visible to the camera
 //
 // spritePoint - where on sprite's plane is hit (0.0-1.0)
-func seesSprite(angle Degree, sprite Sprite) (hit bool, spritePoint float64) {
-	angleDiff := angle.Plus(-playerAngleToSprite(sprite).Get())
+func seesSprite(dir Vector, sprite Sprite) (hit bool, spritePoint float64) {
+	angleDiff := playerDirToSprite(dir, sprite)
 	angleOffset := 18 / playerDistToSprite(sprite) * sprite.Scale
 
-	if angleDiff > 0 && angleDiff < angleOffset {
+	if math.Abs(angleDiff) < angleOffset {
 		return true, (angleDiff + angleOffset) / (angleOffset * 2)
 	}
-	if angleDiff > 360-angleOffset {
-		angleDiff = angleDiff - 360
-		return true, (angleDiff + angleOffset) / (angleOffset * 2)
-	}
+
 	return false, 0
 }
 
-// Calculates angle between a player and the sprite
-func playerAngleToSprite(sprite Sprite) Degree {
+// Calculates angle between the direction and the sprite (negative is to right) in a relation with player position
+func playerDirToSprite(dir Vector, sprite Sprite) float64 {
 	relX, relY := sprite.X-curX, sprite.Y-curY // Coordinates of sprite relative to player's coordinates
-	// We are calculating cos between (x:1;y:0) unit vector(represents players relation to the sprite) and the sprite's angle
-	// It's a simple angle-between-two-vectors minimized-for-zero-vector formula
-	smallestAngle := math.Acos(relX/math.Sqrt((relX*relX)+(relY*relY))) * (180 / math.Pi)
-
-	// Because angle between vector is the smallest one
-	// we should additionally perform this correction
-	if relY <= 0 {
-		return Degree{}.NewDegree(360.0 - smallestAngle)
-	}
-	return Degree{}.NewDegree(smallestAngle)
+	return math.Atan2(relX*dir.Y-relY*dir.X, relX*dir.X+relY*dir.Y) * (180 / math.Pi)
 }
 
 // Calculates distance between player and the sprite
@@ -121,8 +109,7 @@ func playerDistToSprite(sprite Sprite) float64 {
 
 // Calculates perpendicular corrected distance between player and the sprite
 func cPlayerDistToSprite(sprite Sprite) float64 {
-	vectorToPlayerView := curVector.NewRotated(-playerAngleToSprite(sprite).Get())
-	correction := math.Cos(vectorToPlayerView.Angle().Get() * math.Pi / 180)
+	correction := math.Cos(playerDirToSprite(curVector, sprite) * math.Pi / 180)
 	return playerDistToSprite(sprite) * correction
 }
 
@@ -134,10 +121,8 @@ func distToSprite(x, y float64, sprite Sprite) float64 {
 // Calculates if the given point intersects with any sprite
 func intersectsWithSprite(x, y float64) (intersects bool) {
 	for _, sprite := range Sprites {
-		if sprite.Solid {
-			if distToSprite(x, y, *sprite) < sprite.Scale/2 {
-				return true
-			}
+		if sprite.Solid && distToSprite(x, y, *sprite) < sprite.Scale/2 {
+			return true
 		}
 	}
 	return false

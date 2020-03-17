@@ -20,6 +20,11 @@ func (v Vector) Angle() Degree {
 	return Degree{}.NewDegree(angle)
 }
 
+// Magnitude calculates vector scalar length
+func (v Vector) Magnitude() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
 // Rotate rotates vector
 func (v *Vector) Rotate(angle float64) {
 	rads := angle * (math.Pi / 180)
