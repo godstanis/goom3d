@@ -30,12 +30,13 @@ var Sprites []*Sprite
 func drawSpritesColumn(screen screen.Screen, col int, dir Vector, distanceToWall float64) {
 	// We should sort all our sprites by distance so closest are rendered last
 	sort.Slice(Sprites, func(i, j int) bool {
-		return cPlayerDistToSprite(*Sprites[i]) > cPlayerDistToSprite(*Sprites[j])
+		// We dont need sqrt for comparing so we will compare pow distances only
+		return powPlayerDistToSprite(*Sprites[i]) > powPlayerDistToSprite(*Sprites[j])
 	})
 
 	for _, sprite := range Sprites {
 		// Draw sprite column if it is not behind any walls
-		if cPlayerDistToSprite(*sprite) < distanceToWall {
+		if perpPlayerDistToSprite(*sprite) < distanceToWall {
 			drawSpriteColumn(screen, *sprite, col, dir)
 		}
 	}
@@ -48,7 +49,7 @@ func drawSpriteColumn(screen screen.Screen, sprite Sprite, col int, dir Vector) 
 		return
 	}
 
-	baseSpriteH := distToHeight(cPlayerDistToSprite(sprite), screen.Height()) / 2
+	baseSpriteH := distToHeight(perpPlayerDistToSprite(sprite), screen.Height()) / 2
 	scaledSpriteH := int(float64(baseSpriteH) * sprite.Scale)
 	if scaledSpriteH == 0 {
 		return
@@ -102,18 +103,23 @@ func playerDirToSprite(dir Vector, sprite Sprite) float64 {
 	return math.Atan2(relX*dir.Y-relY*dir.X, relX*dir.X+relY*dir.Y) * (180 / math.Pi)
 }
 
+// Calculates unsquared distance between player and the sprite
+func powPlayerDistToSprite(sprite Sprite) float64 {
+	return (sprite.X-curX)*(sprite.X-curX) + (sprite.Y-curY)*(sprite.Y-curY)
+}
+
 // Calculates distance between player and the sprite
 func playerDistToSprite(sprite Sprite) float64 {
-	return distToSprite(curX, curY, sprite)
+	return math.Sqrt(powPlayerDistToSprite(sprite))
 }
 
 // Calculates perpendicular corrected distance between player and the sprite
-func cPlayerDistToSprite(sprite Sprite) float64 {
+func perpPlayerDistToSprite(sprite Sprite) float64 {
 	correction := math.Cos(playerDirToSprite(curVector, sprite) * math.Pi / 180)
 	return playerDistToSprite(sprite) * correction
 }
 
-// Calculates distance to sprite from the given points
+// Calculates real distance to sprite from the given points
 func distToSprite(x, y float64, sprite Sprite) float64 {
 	return math.Sqrt((sprite.X-x)*(sprite.X-x) + (sprite.Y-y)*(sprite.Y-y))
 }
