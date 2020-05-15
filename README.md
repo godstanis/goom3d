@@ -12,7 +12,7 @@ TODO:
   - Engine:
     - [x] Add colors support (screen mod 8/16/256 colors)
     - [x] Add texture importing from image files (png/jpg/bmp)
-    - [ ] Refactor input controls (for cross-compatibility with win/mac/linux)
+    - [x] Refactor input controls (for cross-compatibility with win/mac/linux)
     - [x] Refactor console logic (for cross-compatibility with win/mac/linux)
     - [x] Transfer game objects to specific files
     - [x] Add opengl/sdl2 screen
