@@ -19,7 +19,7 @@ func (scr Sdl2) NewScreen(w, h int) Screen {
 	if err := sdl.Init(sdl.INIT_VIDEO); err != nil {
 		scr.check(err)
 	}
-	window, err := sdl.CreateWindow("Sdl2", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, int32(w), int32(h), sdl.WINDOW_RESIZABLE)
+	window, err := sdl.CreateWindow("Goom3d", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, int32(w), int32(h), sdl.WINDOW_RESIZABLE)
 	scr.check(err)
 	if _, err = window.GetSurface(); err != nil {
 		scr.check(err)
