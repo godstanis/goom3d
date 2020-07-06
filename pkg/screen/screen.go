@@ -2,10 +2,10 @@ package screen
 
 // Screen represents screen buffer
 type Screen interface {
-	NewScreen(w, h int) Screen
+	NewScreen(w, h int) (Screen, error)
 	SetPixel(x, y int, pixel uint32) error
-	Render()
-	Clear()
+	Render() error
+	Clear() error
 	Height() int
 	Width() int
 	SetKeyboardHandler(func(int, bool))
@@ -25,13 +25,13 @@ type DummyScreen struct {
 }
 
 // NewScreen empty screen initializer with buffer of empty pixels
-func (scr DummyScreen) NewScreen(w, h int) Screen {
-	return &DummyScreen{w: w, h: h}
+func (scr DummyScreen) NewScreen(w, h int) (Screen, error) {
+	return &DummyScreen{w: w, h: h}, nil
 }
 
 // Clear clears the screen
-func (scr *DummyScreen) Clear() {
-	return
+func (scr *DummyScreen) Clear() error {
+	return nil
 }
 
 // Height get current screen height
@@ -50,8 +50,8 @@ func (scr *DummyScreen) SetPixel(x, y int, symbol uint32) error {
 }
 
 // Render renders screen content
-func (scr *DummyScreen) Render() {
-	return
+func (scr *DummyScreen) Render() error {
+	return nil
 }
 
 // SetKeyboardHandler sets handler function for input listening

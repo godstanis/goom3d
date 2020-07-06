@@ -13,14 +13,14 @@ type Console struct {
 }
 
 // NewScreen empty screen initializer with buffer of empty pixels
-func (scr Console) NewScreen(w, h int) Screen {
+func (scr Console) NewScreen(w, h int) (Screen, error) {
 	tcell.SetEncodingFallback(tcell.EncodingFallbackASCII)
 	s, err := tcell.NewScreen()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	if err = s.Init(); err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	s.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorWhite).Background(tcell.ColorBlack).Bold(true))
@@ -29,7 +29,7 @@ func (scr Console) NewScreen(w, h int) Screen {
 
 	screen.runControlsMonitor()
 
-	return &screen
+	return &screen, err
 }
 
 // SetPixel puts a pixel on screen
@@ -39,13 +39,13 @@ func (scr *Console) SetPixel(x, y int, color uint32) error {
 }
 
 // Render renders screen to console
-func (scr *Console) Render() {
+func (scr *Console) Render() error {
 	scr.Screen.Show()
-	scr.Clear()
+	return scr.Clear()
 }
 
 // Clear clears the screen
-func (scr *Console) Clear() {
+func (scr *Console) Clear() error {
 	for i := 0; i <= scr.Height(); i++ {
 		for j := 0; j <= scr.Width(); j++ {
 			if i <= scr.Height()/2-1 {
@@ -55,6 +55,7 @@ func (scr *Console) Clear() {
 			}
 		}
 	}
+	return nil
 }
 
 // Height get current screen height
