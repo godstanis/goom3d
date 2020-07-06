@@ -1,4 +1,4 @@
-# goom3d
+# goom3d ![Go-Build](https://github.com/godstanis/goom3d/workflows/Go-Build/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/godstanis/goom3d)](https://goreportcard.com/report/github.com/godstanis/goom3d)
 
 :suspect: 3D-like first-person shooter written in go and hugely inspired by Wolfenstein 3D
 
