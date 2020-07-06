@@ -12,21 +12,28 @@ var rotateSpeed, walkSpeed = 4.0, 0.07
 func main() {
 	(&engine.Loader{}).LoadScene("obj/scenes/01.scn")
 
-	output := getScreen()
+	output := getScreen(1000, 600)
 	for {
 		engine.RenderView(output)
 	}
 }
 
 // Creates screen depending on run flags
-func getScreen() screen.Screen {
+func getScreen(w, h int) screen.Screen {
+	var err error
 	runSdl2 := flag.Bool("sdl2", false, "a string")
+	runDebug := flag.Bool("debug", false, "a string")
 	flag.Parse()
 	var scr screen.Screen
 	if *runSdl2 {
-		scr = screen.Sdl2{}.NewScreen(1000, 500)
+		scr, err = screen.Sdl2{}.NewScreen(w, h)
+	} else if *runDebug {
+		scr, err = screen.DummyScreen{}.NewScreen(w, h)
 	} else {
-		scr = screen.Console{}.NewScreen(0, 0) // Console is auto-sized
+		scr, err = screen.Console{}.NewScreen(0, 0) // Console is auto-sized
+	}
+	if err != nil {
+		panic(err)
 	}
 	scr.SetKeyboardHandler(keyCodeToInput)
 

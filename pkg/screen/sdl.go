@@ -99,6 +99,7 @@ func (scr *Sdl2) Clear() error {
 		return err
 	}
 
+	scr.buffer = make([][]uint32, scr.Height()+1)
 	for i := range scr.buffer {
 		scr.buffer[i] = make([]uint32, scr.Width()+1)
 	}
