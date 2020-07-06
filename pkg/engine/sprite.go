@@ -35,9 +35,11 @@ func drawSpritesColumn(screen screen.Screen, col int, dir Vector, distanceToWall
 	})
 
 	for _, sprite := range Sprites {
-		// Draw sprite column if it is not behind any walls
-		if perpPlayerDistToSprite(*sprite) < distanceToWall {
-			drawSpriteColumn(screen, *sprite, col, dir)
+		if distToPlayer := perpPlayerDistToSprite(*sprite); distToPlayer > 0.3 {
+			// Draw sprite column if it is not behind any walls
+			if distToPlayer < distanceToWall {
+				drawSpriteColumn(screen, *sprite, col, dir)
+			}
 		}
 	}
 }
