@@ -36,7 +36,7 @@ func drawMinimap(screen screen.Screen) {
 	offset := 2
 	for rI, row := range Map {
 		for tI, tile := range row {
-			if int(curY) == rI && int(curX) == tI {
+			if int(player.Y) == rI && int(player.X) == tI {
 				_ = screen.SetPixel(tI+offset, rI+offset, 0x458925)
 				continue
 			}

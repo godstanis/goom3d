@@ -101,13 +101,13 @@ func seesSprite(dir Vector, sprite Sprite) (hit bool, spritePoint float64) {
 
 // Calculates angle between the direction and the sprite (negative is to right) in a relation with player position
 func playerDirToSprite(dir Vector, sprite Sprite) float64 {
-	relX, relY := sprite.X-curX, sprite.Y-curY // Coordinates of sprite relative to player's coordinates
+	relX, relY := sprite.X-player.X, sprite.Y-player.Y // Coordinates of sprite relative to player's coordinates
 	return math.Atan2(relX*dir.Y-relY*dir.X, relX*dir.X+relY*dir.Y) * (180 / math.Pi)
 }
 
 // Calculates unsquared distance between player and the sprite
 func powPlayerDistToSprite(sprite Sprite) float64 {
-	return (sprite.X-curX)*(sprite.X-curX) + (sprite.Y-curY)*(sprite.Y-curY)
+	return (sprite.X-player.X)*(sprite.X-player.X) + (sprite.Y-player.Y)*(sprite.Y-player.Y)
 }
 
 // Calculates distance between player and the sprite
@@ -117,7 +117,7 @@ func playerDistToSprite(sprite Sprite) float64 {
 
 // Calculates perpendicular corrected distance between player and the sprite
 func perpPlayerDistToSprite(sprite Sprite) float64 {
-	correction := math.Cos(playerDirToSprite(curVector, sprite) * math.Pi / 180)
+	correction := math.Cos(playerDirToSprite(*player.POV, sprite) * math.Pi / 180)
 	return playerDistToSprite(sprite) * correction
 }
 

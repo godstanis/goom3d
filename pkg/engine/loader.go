@@ -60,7 +60,7 @@ func (ldr *Loader) initPlayer(sc *bufio.Scanner) {
 	x, _ := strconv.ParseFloat(strings.Split(elements[1], "-")[0], 64)
 	y, _ := strconv.ParseFloat(strings.Split(elements[1], "-")[1], 64)
 	angle, _ := strconv.ParseFloat(elements[2], 64)
-	SetPlayerPosition(x, y, angle)
+	player.Position(x, y, angle)
 }
 
 // storeWallTexture stores wall texture in memory

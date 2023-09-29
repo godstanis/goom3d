@@ -1,43 +1,49 @@
 package engine
 
-// Position of a player relative to a world coordinates
-var curX = 0.0
-var curY = 0.0
+type Camera struct {
+	X, Y     float64
+	POV      *Vector
+	FOV      float64
+	ViewDist float64
+}
 
-// Current POV of a player direction vector
-var curVector = Vector{}
+var player = *NewPlayer()
 
-// Current FOV of a camera
-var curFov = 90.0
-
-// Maximum raycasting distance
-var viewDistance = 20.0
+func NewPlayer() *Camera {
+	return &Camera{
+		X:        0,
+		Y:        0,
+		POV:      &Vector{},
+		FOV:      90,
+		ViewDist: 20,
+	}
+}
 
 // TurnPlayer turns player around by a given angle (minus is left, plus is right)
-func TurnPlayer(dAngle float64) {
-	curVector.Rotate(dAngle)
+func (p *Camera) TurnPlayer(dAngle float64) {
+	p.POV.Rotate(dAngle)
 }
 
 // StrafePlayerV moves player vertically (forward, backward) by a given dist (related to it's angle)
-func StrafePlayerV(dDist float64) {
-	nextX, nextY := curX+curVector.X*dDist, curY+curVector.Y*dDist
-	if CollidesWithAnything(nextX, nextY) {
+func (p *Camera) StrafePlayerV(dDist float64) {
+	nextX, nextY := p.X+p.POV.X*dDist, p.Y+p.POV.Y*dDist
+	if p.Collision(nextX, nextY) {
 		return
 	}
-	curX, curY = nextX, nextY
+	p.X, p.Y = nextX, nextY
 }
 
 // StrafePlayerH moves player horizontally (left, right) by a given dist (related to it's angle)
-func StrafePlayerH(dDist float64) {
-	nextX, nextY := curX-curVector.Y*dDist, curY+curVector.X*dDist
-	if CollidesWithAnything(nextX, nextY) {
+func (p *Camera) StrafePlayerH(dDist float64) {
+	nextX, nextY := p.X-p.POV.Y*dDist, p.Y+p.POV.X*dDist
+	if p.Collision(nextX, nextY) {
 		return
 	}
-	curX, curY = nextX, nextY
+	p.X, p.Y = nextX, nextY
 }
 
-// CollidesWithAnything determines if the given point collides with anny solid object
-func CollidesWithAnything(x, y float64) bool {
+// Collision determines if the given point collides with anny solid object
+func (p *Camera) Collision(x, y float64) bool {
 	intersectsWithMap, _, _ := IntersectsWithMap(x, y)
 	if intersectsWithMap || intersectsWithSprite(x, y) {
 		return true
@@ -46,13 +52,28 @@ func CollidesWithAnything(x, y float64) bool {
 }
 
 // ShiftFov changes FOV by a given amount
-func ShiftFov(fov float64) {
-	curFov += fov
+func (p *Camera) ShiftFov(fov float64) {
+	p.FOV += fov
 }
 
-// SetPlayerPosition sets player global position relative to world coordinates
-func SetPlayerPosition(x, y, angle float64) {
-	curX = x
-	curY = y
-	curVector = Vector{}.NewFromAngle(angle)
+// Position sets player global position relative to world coordinates
+func (p *Camera) Position(x, y, angle float64) {
+	p.X, p.Y = x, y
+	vec := (&Vector{}).NewFromAngle(angle)
+	p.POV = &vec
+}
+
+// TurnPlayer turns player around by a given angle (minus is left, plus is right)
+func TurnPlayer(dAngle float64) {
+	player.TurnPlayer(dAngle)
+}
+
+// StrafePlayerV moves player vertically (forward, backward) by a given dist (related to it's angle)
+func StrafePlayerV(dDist float64) {
+	player.StrafePlayerV(dDist)
+}
+
+// StrafePlayerH moves player horizontally (left, right) by a given dist (related to it's angle)
+func StrafePlayerH(dDist float64) {
+	player.StrafePlayerH(dDist)
 }
